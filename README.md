@@ -4,6 +4,9 @@ A project where we will make a procedural city generator, real-time pathfinding 
 
 With the collaboration of:
 Nacho Cortizo (nachocpol@gmail.com)
+
 Daniel Laserna (lasernacus@gmail.com)
+
 Javier Pastor (javierpastorserrano@gmail.com)
+
 David Parra (davidparraausina@gmail.com)
