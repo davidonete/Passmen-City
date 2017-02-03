@@ -6,6 +6,6 @@ A Unity3D project where we will make a procedural city generator, real-time path
 
 With the collaboration of:
 * Nacho Cortizo (nachocpol@gmail.com)
-* Daniel Laserna (lasernacus@gmail.com)
+* Daniel Laserna (condadodaniel@hotmail.com)
 * Javier Pastor (javierpastorserrano@gmail.com)
 * David Parra (davidparraausina@gmail.com)
