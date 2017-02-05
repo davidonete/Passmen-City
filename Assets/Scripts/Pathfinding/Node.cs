@@ -8,11 +8,10 @@ using System.Collections;
 public class Node : MonoBehaviour
 {
     // The position of the node in the scene
-    private Vector3 mPosition;
     public Vector3 Position
     {
-        get { return mPosition; }
-        set { mPosition = value; }
+        get { return transform.position; }
+        set { transform.position = value; }
     }
 
     // A list of segments conected to this node
@@ -22,5 +21,11 @@ public class Node : MonoBehaviour
     {
         get { return mSegments; }
         set { mSegments = value; }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, 0.75f);
     }
 }
