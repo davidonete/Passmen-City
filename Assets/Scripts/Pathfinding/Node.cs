@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Node 
@@ -7,25 +7,33 @@ using System.Collections;
 /// </summary>
 public class Node : MonoBehaviour
 {
-    // The position of the node in the scene
-    public Vector3 Position
+    //Set the node walcable or not
+    private bool mWalcable = true;
+
+    // A list of nodes conected to this node
+    private List<Node> mNeighbors = new List<Node>();
+    
+    public bool Walcable
     {
-        get { return transform.position; }
-        set { transform.position = value; }
+        get { return mWalcable; }
+        set { mWalcable = value; }
     }
 
-    // A list of segments conected to this node
-    // NOTE:the array is not initialized by default.
-    private Segment[] mSegments;
-    public Segment[] Segments
+    public List<Node> Neighbors
     {
-        get { return mSegments; }
-        set { mSegments = value; }
+        get { return mNeighbors; }
+        set { mNeighbors = value; }
     }
 
-    void OnDrawGizmos()
+    //Add a node to the list of neighbors
+    public void AddNeighbor (Node node)
+    {
+        mNeighbors.Add(node);
+    }
+
+    /*void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 0.75f);
-    }
+    }*/
 }
