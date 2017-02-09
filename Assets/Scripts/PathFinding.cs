@@ -4,12 +4,14 @@ using System.Collections.Generic;
 public class PathFinding : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 	
 	}
 }
@@ -17,8 +19,10 @@ public class PathFinding : MonoBehaviour {
 public interface WeightedGraph<L>
 {
     double Cost(Vector3 a, Vector3 b);
+
     IEnumerable<Vector3> Neighbors(Vector3 id);
 }
+
 public class SquareGrid : WeightedGraph<Vector3>
 {
     // Implementation notes: I made the fields public for convenience,
@@ -45,8 +49,7 @@ public class SquareGrid : WeightedGraph<Vector3>
 
     public bool InBounds(Vector3 id)
     {
-        return 0 <= id.x && id.x < width
-            && 0 <= id.y && id.y < height;
+        return 0 <= id.x && id.x < width && 0 <= id.y && id.y < height;
     }
 
     public bool Passable(Vector3 id)
