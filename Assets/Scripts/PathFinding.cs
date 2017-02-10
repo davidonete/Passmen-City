@@ -76,6 +76,32 @@ public class SquareGrid : WeightedGraph<Vector3>
     }
 }
 
+/*public class NodeGraph : WeightedGraph<Vector3>
+{
+    public HashSet<Vector3> pedestrian = new HashSet<Vector3>();
+
+    private List<GameObject> mGraph;
+    
+    public NodeGraph(List<GameObject> graph)
+    {
+        this.mGraph = graph;
+    }
+     
+    //Use this as with the pedestrianCrossing
+    public double Cost(Vector3 a, Vector3 b)
+    {
+        return pedestrian.Contains(b) ? 5 : 1;
+    }
+
+    public IEnumerable<Node> Neighbors(Node node)
+    {
+        foreach (var neighbor in node.Neighbors)
+        {
+            yield return neighbor;
+        }
+    }
+}*/
+
 public class PriorityQueue<Vector3>
 {
     public class Tuple
