@@ -2,6 +2,17 @@
 using System.Collections.Generic;
 
 /// <summary>
+/// NodeNeighbors
+/// A neighbor node and its distance to the initial node
+/// </summary>
+[System.Serializable]
+public class NodeNeighbors
+{
+    public GameObject OtherNode;
+    public float Distance;
+}
+
+/// <summary>
 /// Node 
 /// 3D position
 /// </summary>
@@ -12,7 +23,7 @@ public class Node : MonoBehaviour
 
     // A list of nodes conected to this node
     [SerializeField]
-    private List<GameObject> mNeighbors = new List<GameObject>();
+    private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
     
     public bool Walcable
     {
@@ -20,14 +31,14 @@ public class Node : MonoBehaviour
         set { mWalcable = value; }
     }
 
-    public List<GameObject> Neighbors
+    public List<NodeNeighbors> Neighbors
     {
         get { return mNeighbors; }
         set { mNeighbors = value; }
     }
 
     //Add a node to the list of neighbors
-    public void AddNeighbor (GameObject node)
+    public void AddNeighbor (NodeNeighbors node)
     {
         mNeighbors.Add(node);
     }
@@ -36,5 +47,10 @@ public class Node : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 0.75f);
+        foreach(NodeNeighbors go in mNeighbors)
+        {
+            Gizmos.DrawLine(transform.position, 
+                            go.OtherNode.transform.position);
+        }
     }
 }
