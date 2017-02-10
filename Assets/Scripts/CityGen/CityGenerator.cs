@@ -10,8 +10,10 @@ using System.Collections.Generic;
 public class CityGenerator : MonoBehaviour
 {
     public int Width = 10;
+    public float NodeSeparation = 5.0f;
     public GameObject Node;
     public List<GameObject> Nodes;
+    public GameObject BuildingBasic;
 
     void Awake()
     {
@@ -22,7 +24,7 @@ public class CityGenerator : MonoBehaviour
             {
                 GameObject n = GameObject.Instantiate(Node);
                 n.name = "Node_" + x.ToString() + "_" + z.ToString();
-                n.transform.position = new Vector3(x * 4, 0.0f, z * 4);
+                n.transform.position = new Vector3(x * NodeSeparation, 0.0f, z * NodeSeparation);
                 Nodes.Add(n);
             }
         }
@@ -72,6 +74,26 @@ public class CityGenerator : MonoBehaviour
                                                     Nodes[curI].transform.position);
                     Nodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
+            }
+        }
+        AddBuildings();
+    }
+
+    void AddBuildings()
+    {
+        for (int z = -1; z < Width; z++)
+        {
+            for (int x = -1; x < Width; x++)
+            {
+                Vector3 bPos = new Vector3( (x+0.5f) * NodeSeparation, 
+                                            0.0f,
+                                            (z + 0.5f) * NodeSeparation);
+                GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
+                b.transform.localScale = new Vector3(2.0f, Random.Range(4, 20), 2.0f);
+                //int vCount = b.GetComponent<MeshFilter>().mesh.vertexCount;
+                //Vector3[] v= new Vector3[vCount];
+                //v = b.GetComponent<MeshFilter>().mesh.vertices;
+                //v[0].x++;
             }
         }
     }
