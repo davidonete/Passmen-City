@@ -11,7 +11,8 @@ public class Node : MonoBehaviour
     private bool mWalcable = true;
 
     // A list of nodes conected to this node
-    private List<Node> mNeighbors = new List<Node>();
+    [SerializeField]
+    private List<GameObject> mNeighbors = new List<GameObject>();
     
     public bool Walcable
     {
@@ -19,21 +20,21 @@ public class Node : MonoBehaviour
         set { mWalcable = value; }
     }
 
-    public List<Node> Neighbors
+    public List<GameObject> Neighbors
     {
         get { return mNeighbors; }
         set { mNeighbors = value; }
     }
 
     //Add a node to the list of neighbors
-    public void AddNeighbor (Node node)
+    public void AddNeighbor (GameObject node)
     {
         mNeighbors.Add(node);
     }
 
-    /*void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 0.75f);
-    }*/
+    }
 }
