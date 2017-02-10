@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// </summary>
 public class CityGenerator : MonoBehaviour
 {
-    public int Width = 10;
+    public int Width = 500;
     public float NodeSeparation = 5.0f;
     public GameObject Node;
     public List<GameObject> Nodes;
@@ -85,11 +85,14 @@ public class CityGenerator : MonoBehaviour
         {
             for (int x = -1; x < Width; x++)
             {
+                Vector3 cPos = new Vector3(x * NodeSeparation, 0.0f, z * NodeSeparation);
+                float d = Vector3.Distance(cPos, new Vector3((Width * NodeSeparation) * 0.5f, 0.0f, (Width * NodeSeparation) * 0.5f));
                 Vector3 bPos = new Vector3( (x+0.5f) * NodeSeparation, 
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
-                b.transform.localScale = new Vector3(2.0f, Random.Range(4, 20), 2.0f);
+                b.transform.localScale = new Vector3(2.0f, Random.Range(20, 20) - d, 2.0f);
+                Debug.Log(d);
                 //int vCount = b.GetComponent<MeshFilter>().mesh.vertexCount;
                 //Vector3[] v= new Vector3[vCount];
                 //v = b.GetComponent<MeshFilter>().mesh.vertices;
