@@ -86,17 +86,11 @@ public class CityGenerator : MonoBehaviour
             for (int x = -1; x < Width; x++)
             {
                 Vector3 cPos = new Vector3(x * NodeSeparation, 0.0f, z * NodeSeparation);
-                float d = Vector3.Distance(cPos, new Vector3((Width * NodeSeparation) * 0.5f, 0.0f, (Width * NodeSeparation) * 0.5f));
                 Vector3 bPos = new Vector3( (x+0.5f) * NodeSeparation, 
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
-                b.transform.localScale = new Vector3(2.0f, Random.Range(20, 20) - d, 2.0f);
-                Debug.Log(d);
-                //int vCount = b.GetComponent<MeshFilter>().mesh.vertexCount;
-                //Vector3[] v= new Vector3[vCount];
-                //v = b.GetComponent<MeshFilter>().mesh.vertices;
-                //v[0].x++;
+                b.transform.localScale = new Vector3(2.0f, Random.Range(2, 5), 2.0f);
             }
         }
     }
