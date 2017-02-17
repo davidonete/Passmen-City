@@ -49,8 +49,7 @@ public class Node : MonoBehaviour
         Gizmos.DrawSphere(transform.position, 0.75f);
         foreach(NodeNeighbors go in mNeighbors)
         {
-            Gizmos.DrawLine(transform.position, 
-                            go.OtherNode.transform.position);
+            Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AI_PersonBehavior : MonoBehaviour
 {
-    private Vector3 mNextStep;
+    private GameObject mNextStep;
 
     private Vector3 end;
 
@@ -17,16 +17,15 @@ public class AI_PersonBehavior : MonoBehaviour
     private AStarSearch mAStar;
 
     private float mVelocity;
-
-	// Use this for initialization
+    
 	void Start ()
     {
         mMinDistance = 0.4f;
         mVelocity = 0.02f;
-        FindNewObjective();
+        GetNearestWaypoint();
+        //FindNewObjective();
     }
-
-	// Update is called once per frame
+    
 	void Update ()
     {
         if (Distance(new Vector3(transform.position.x, transform.position.z), mNextStep) > mMinDistance)
@@ -49,7 +48,7 @@ public class AI_PersonBehavior : MonoBehaviour
         }
     }
 
-    float Distance(Vector3 v1, Vector3 v2)
+    private float Distance(Vector3 v1, Vector3 v2)
     {
         float x1 = Mathf.Min(v1.x, v2.x);
         float x2 = Mathf.Max(v1.x, v2.x);
@@ -58,19 +57,27 @@ public class AI_PersonBehavior : MonoBehaviour
         return (x2 - x1) + (y2 - y1);
     }
 
-    void FindNewObjective()
+    private void FindNewObjective()
     {
-        Vector3 start = new Vector3((int)transform.position.x, (int)transform.position.z);
+        Vector3 startPoint = new Vector3((int)transform.position.x, (int)transform.position.z);
+        GameObject start = GetNearestWaypoint(startPoint);
+
         end = new Vector3(Random.Range(0, 9), Random.Range(0, 9));
+
         mAStar = new AStarSearch(WaypointsExample.grid, start, end);
         
         indexStep = 0;
-        mNextStep = end;
+        mNextStep = GetNearestWaypoint(end);
         while (mNextStep.x != (int)transform.position.x || mNextStep.y != (int)transform.position.z)
         {
             indexStep++;
             path.Add(mNextStep);
             mNextStep = mAStar.cameFrom[mNextStep];
         }
+    }
+
+    private GameObject GetNearestWaypoint(Vector3 point)
+    {
+        return GameObject;
     }
 }
