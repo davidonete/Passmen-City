@@ -8,8 +8,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class NodeNeighbors
 {
-    public GameObject OtherNode;
-    public float Distance;
+  public GameObject OtherNode;
+  public float Distance;
 }
 
 /// <summary>
@@ -18,38 +18,38 @@ public class NodeNeighbors
 /// </summary>
 public class Node : MonoBehaviour
 {
-    //Set the node walcable or not
-    private bool mWalcable = true;
+  //Set the node walcable or not
+  private bool mWalcable = true;
 
-    // A list of nodes conected to this node
-    [SerializeField]
-    private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
-    
-    public bool Walcable
-    {
-        get { return mWalcable; }
-        set { mWalcable = value; }
-    }
+  // A list of nodes conected to this node
+  [SerializeField]
+  private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
 
-    public List<NodeNeighbors> Neighbors
-    {
-        get { return mNeighbors; }
-        set { mNeighbors = value; }
-    }
+  public bool Walcable
+  {
+    get { return mWalcable; }
+    set { mWalcable = value; }
+  }
 
-    //Add a node to the list of neighbors
-    public void AddNeighbor (NodeNeighbors node)
-    {
-        mNeighbors.Add(node);
-    }
+  public List<NodeNeighbors> Neighbors
+  {
+    get { return mNeighbors; }
+    set { mNeighbors = value; }
+  }
 
-    void OnDrawGizmos()
+  //Add a node to the list of neighbors
+  public void AddNeighbor(NodeNeighbors node)
+  {
+    mNeighbors.Add(node);
+  }
+
+  void OnDrawGizmos()
+  {
+    Gizmos.color = Color.red;
+    Gizmos.DrawSphere(transform.position, 0.75f);
+    foreach (NodeNeighbors go in mNeighbors)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, 0.75f);
-        foreach(NodeNeighbors go in mNeighbors)
-        {
-            Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
-        }
+      Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
     }
+  }
 }
