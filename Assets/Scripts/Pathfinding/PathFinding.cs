@@ -155,7 +155,7 @@ public class AStarSearch
     float nearestDistance = 9999.0f;
     foreach (Vector3 node in graph.Nodes())
     {
-      float distance = Distance(node, position);
+      float distance = Vector3.Distance(node, position);
       if (distance < nearestDistance)
       {
         nearestNode = node;
@@ -177,15 +177,6 @@ public class AStarSearch
         return node;
       }
     }
-    return new Vector3();
-  }
-
-  private static float Distance(Vector3 v1, Vector3 v2)
-  {
-    float x1 = Mathf.Min(v1.x, v2.x);
-    float x2 = Mathf.Max(v1.x, v2.x);
-    float y1 = Mathf.Min(v1.y, v2.y);
-    float y2 = Mathf.Max(v1.y, v2.y);
-    return (x2 - x1) + (y2 - y1);
+    return new Vector3(0, 0, 0);
   }
 }

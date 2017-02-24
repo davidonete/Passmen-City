@@ -25,7 +25,7 @@ public class AI_PersonBehavior : MonoBehaviour
 
   void Update()
   {
-    if (Distance(transform.position, mNextStep) > mMinDistance)
+    if (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
     {
       transform.position += (mNextStep - transform.position).normalized * mVelocity;
       //Debug.Log("[]");
@@ -50,28 +50,20 @@ public class AI_PersonBehavior : MonoBehaviour
     if (WaypointsExample.grid.NodesCount() > 0)
     {
       Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.grid, transform.position);
-
       end = AStarSearch.GetRandomWaypoint(WaypointsExample.grid);
-
+      end = new Vector3(0, 0, 10);
       mAStar = new AStarSearch(WaypointsExample.grid, start, end);
 
       indexStep = 0;
-      mNextStep = AStarSearch.GetNearestWaypoint(WaypointsExample.grid, end);
-      while (mNextStep.x != (int)transform.position.x || mNextStep.y != (int)transform.position.z)
+      mNextStep = end;
+      while (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
       {
         indexStep++;
         path.Add(mNextStep);
+        Debug.Log(indexStep);
         mNextStep = mAStar.cameFrom[mNextStep];
+        Debug.Log("YEAH");
       }
     }
-  }
-
-  private static float Distance(Vector3 v1, Vector3 v2)
-  {
-    float x1 = Mathf.Min(v1.x, v2.x);
-    float x2 = Mathf.Max(v1.x, v2.x);
-    float y1 = Mathf.Min(v1.y, v2.y);
-    float y2 = Mathf.Max(v1.y, v2.y);
-    return (x2 - x1) + (y2 - y1);
   }
 }
