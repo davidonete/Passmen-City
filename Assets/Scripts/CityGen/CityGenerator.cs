@@ -76,7 +76,8 @@ public class CityGenerator : MonoBehaviour
                 }
             }
         }
-        AddBuildings();
+        // AddBuildings();
+        FillGraph();
     }
 
     void AddBuildings()
@@ -92,6 +93,21 @@ public class CityGenerator : MonoBehaviour
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
                 b.transform.localScale = new Vector3(2.0f, Random.Range(2, 5), 2.0f);
             }
+        }
+    }
+
+    void FillGraph()
+    {
+        Dictionary<Vector3, double> neighbours = new Dictionary<Vector3, double>();
+        for(int i=0;i<Nodes.Count;i++)
+        {
+            Node n = Nodes[i].GetComponent<Node>();
+            neighbours.Clear();
+            foreach(NodeNeighbors nn in n.Neighbors)
+            {
+                neighbours.Add(nn.OtherNode.transform.position, nn.Distance);
+            }
+            WaypointsExample.grid.AddNodeToGraph(n.transform.position, neighbours);
         }
     }
 }
