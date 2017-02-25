@@ -98,16 +98,20 @@ public class CityGenerator : MonoBehaviour
 
     void FillGraph()
     {
-        Dictionary<Vector3, double> neighbours = new Dictionary<Vector3, double>();
+        // For each generated node
         for(int i=0;i<Nodes.Count;i++)
         {
             Node n = Nodes[i].GetComponent<Node>();
-            neighbours.Clear();
-            foreach(NodeNeighbors nn in n.Neighbors)
+            if (!n) Debug.LogWarning("This object does not have a node component.");
+
+            // Build a list of the neighbours of this node
+            Dictionary<Vector3, double> nb = new Dictionary<Vector3, double>();
+            for (int j = 0;j<n.Neighbors.Count;j++)
             {
-                neighbours.Add(nn.OtherNode.transform.position, nn.Distance);
+                nb.Add(n.Neighbors[j].OtherNode.transform.position, n.Neighbors[j].Distance);
             }
-            WaypointsExample.grid.AddNodeToGraph(n.transform.position, neighbours);
+            // Add the node and nb to the grid
+            WaypointsExample.grid.AddNodeToGraph(n.transform.position, nb);
         }
     }
 }
