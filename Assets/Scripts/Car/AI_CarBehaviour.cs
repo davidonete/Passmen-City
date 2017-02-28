@@ -3,57 +3,125 @@ using System.Collections;
 
 public class AICarBehaviour : MonoBehaviour {
 
-    private enum CarStates
+  private enum CarStates
+  {
+    kCarState_Searching,
+    kCarState_Driving,
+    kCarState_Waiting
+  }
+
+  private struct CarConditions
+  {
+    // Searching State
+    public bool IsSearching;
+    // Driving State
+    public bool IsDriving;
+    // Waiting State
+    public bool IsWaiting;
+  }
+
+  private CarStates State;
+  private CarConditions Condition;
+
+
+  void Start()
+  {
+    State = CarStates.kCarState_Searching;
+
+    Condition.IsSearching = true;
+    Condition.IsDriving = false;
+    Condition.IsWaiting = false;
+  }
+
+  void Update()
+  {
+    StateMachine();
+  }
+
+  void StateMachine()
+  {
+    switch (State)
     {
-        kCarState_Searching,
-        kCarState_Driving,
-        kCarState_Waiting
-    }
+      case CarStates.kCarState_Searching:
+        Searching();
+        break;
 
-    private struct CarConditions
+      case CarStates.kCarState_Driving:
+        Driving();
+        break;
+
+      case CarStates.kCarState_Waiting:
+        Waiting();
+        break;
+
+      default:
+        break;
+     }
+  }
+
+  // Searching for a new direction
+  void Searching()
+  {
+    if (Condition.IsSearching)
     {
-        // Searching State
-        private bool IsSearching;
-        // Driving State
-        private bool IsDriving;
-        // Waiting State
-        private bool IsWaiting;
+     /*
+     if (SearchedPoint)
+     {
+       Condition.IsSearching = false;
+     }
+     */
     }
-
-    private CarStates State;
-
-
-    void Start()
+    else
     {
-        State = CarStates.kCarState_Searching;
+      Condition.IsDriving = true;
+      State = CarStates.kCarState_Driving;
     }
+  }
 
-    void Update()
+  // Driving to the end point
+  void Driving()
+  {
+    if (Condition.IsDriving)
     {
-        StateMachine();
-    }
+      /*
+      if (ObstacleDetected && !GreenLightOn)
+      {
+        Condition.IsDriving = false;
+        Condition.IsWaiting = true;
+        State = CarStates.kCarState_Waiting;
+      }
+      */
 
-    void StateMachine()
+      /*
+     if (ReachedPoint)
+     {
+       Condition.IsDriving = false;
+     }
+     */
+    }
+    else
     {
-        switch (State)
-        {
-            case CarStates.kCarState_Searching:
-                Searching();
-                break;
-
-            case CarStates.kCarState_Driving:
-
-                break;
-
-            case CarStates.kCarState_Waiting:
-
-                break;
-        }
+      Condition.IsSearching = true;
+      State = CarStates.kCarState_Searching;
     }
+  }
 
-    // Searching for a new direction
-    void Searching()
+  // Waiting traffic light
+  void Waiting()
+  {
+    if (Condition.IsWaiting)
     {
-
+      /*
+      if (GreenLightOn)
+      {
+        Condition.IsWaiting = false;
+      }
+      */
     }
+    else
+    {
+      Condition.IsDriving = true;
+      State = CarStates.kCarState_Driving;
+    }
+  }
 }
