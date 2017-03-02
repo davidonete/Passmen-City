@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AICarBehaviour : MonoBehaviour {
+public class AI_CarBehaviour : MonoBehaviour {
+
 
   private enum CarStates
   {
@@ -56,7 +57,7 @@ public class AICarBehaviour : MonoBehaviour {
 
       default:
         break;
-     }
+    }
   }
 
   // Searching for a new direction
@@ -64,12 +65,13 @@ public class AICarBehaviour : MonoBehaviour {
   {
     if (Condition.IsSearching)
     {
-     /*
-     if (SearchedPoint)
-     {
-       Condition.IsSearching = false;
-     }
-     */
+      /*
+      if (SearchedPoint)
+      {
+        Condition.IsSearching = false;
+      }
+      */
+      Condition.IsSearching = false;
     }
     else
     {
