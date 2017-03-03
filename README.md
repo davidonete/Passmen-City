@@ -2,7 +2,14 @@
 
 Teesside University - AI for Games
 
-A Unity3D project where we will make a procedural city generator, real-time pathfinding and various types of agents, such as Cars and Pedestrians which will interact between them and with the environment.
+A Unity3D simulator where you can see the interaction between various types of agents, such as pedestrians or cars, on a procedural generated city.
+
+The project is composed by the following elements:
+- Procedural city generation
+- Decision trees for agents (FSM)
+- Crowd/Flocking system (pedestrians)
+- Real-time pathfinding (cars and pedestrians)
+- Naive bayes classifier (pedestrian generation)
 
 Made by:
 * Nacho Cortizo (nachocpol@gmail.com)
