@@ -167,7 +167,7 @@ public class AStarSearch
 
   public static Vector3 GetRandomWaypoint(Graph graph)
   {
-    int rand = Random.Range(0, graph.NodesCount());
+    int rand = Random.Range(0, graph.NodesCount() + 1);
     int index = 0;
     foreach (var node in graph.Nodes())
     {
