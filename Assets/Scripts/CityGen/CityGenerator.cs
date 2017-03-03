@@ -17,6 +17,8 @@ public class CityGenerator : MonoBehaviour
 
     void Awake()
     {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
         // Fill with nodes
         for (int x = 0; x < Width; x++)
         {
@@ -76,7 +78,7 @@ public class CityGenerator : MonoBehaviour
                 }
             }
         }
-        // AddBuildings();
+        AddBuildings();
         FillGraph();
     }
 
@@ -91,7 +93,10 @@ public class CityGenerator : MonoBehaviour
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
-                b.transform.localScale = new Vector3(2.0f, Random.Range(2, 5), 2.0f);
+                float h = Random.Range(2.0f, 7.0f);
+                float w = Random.Range(1.0f, 3.0f);
+                Debug.Log(h + "," + w);
+                b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h,w);
             }
         }
     }
