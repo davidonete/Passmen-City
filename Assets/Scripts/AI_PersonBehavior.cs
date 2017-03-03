@@ -51,19 +51,20 @@ public class AI_PersonBehavior : MonoBehaviour
     {
       Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.grid, transform.position);
       end = AStarSearch.GetRandomWaypoint(WaypointsExample.grid);
-      end = new Vector3(0, 0, 10);
       mAStar = new AStarSearch(WaypointsExample.grid, start, end);
 
+      Debug.Log("Start: " + start + "| End: " + end);
       indexStep = 0;
       mNextStep = end;
       while (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
       {
         indexStep++;
         path.Add(mNextStep);
-        Debug.Log(indexStep);
+        Debug.Log("Next " + mNextStep);
         mNextStep = mAStar.cameFrom[mNextStep];
-        Debug.Log("YEAH");
+        Debug.Log("Next " + mNextStep);
       }
+      Debug.Log(" ");
     }
   }
 }
