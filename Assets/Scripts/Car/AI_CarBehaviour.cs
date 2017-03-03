@@ -24,7 +24,6 @@ public class AI_CarBehaviour : MonoBehaviour {
   private CarStates State;
   private CarConditions Condition;
 
-
   void Start()
   {
     State = CarStates.kCarState_Searching;
@@ -85,6 +84,7 @@ public class AI_CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsDriving)
     {
+      transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
       /*
       if (ObstacleDetected && !GreenLightOn)
       {

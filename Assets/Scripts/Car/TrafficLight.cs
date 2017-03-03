@@ -3,6 +3,13 @@ using System.Collections;
 
 public class TrafficLight : MonoBehaviour {
 
+  public enum TrafficLightState
+  {
+    kTrafficLightStates_Green,
+    kTrafficLightStates_Red
+  }
+  private TrafficLightState State;
+
   public Material Red;
   public Material Green;
   private Renderer Renderer;
@@ -19,18 +26,29 @@ public class TrafficLight : MonoBehaviour {
   }
 	
 	// Update is called once per frame
-	void Update () {
+  void Update () {
     Timer();
-	}
+  }
+
+  public TrafficLightState GetTrafficLightState()
+  {
+    return State;
+  }
 
   void RandomMaterial()
   {
     int number = Random.Range(0, 2);
    
     if (number == 0)
+    {
       Renderer.material = Red;
+      State = TrafficLightState.kTrafficLightStates_Red;
+    }
     else
+    {
       Renderer.material = Green;
+      State = TrafficLightState.kTrafficLightStates_Green;
+    }
   }
 
   void Timer()
@@ -46,8 +64,14 @@ public class TrafficLight : MonoBehaviour {
   void ChangeMaterial()
   {
     if (Renderer.material.name.Substring(0, Renderer.material.name.Length - 11) == Red.name)
+    {
       Renderer.material = Green;
+      State = TrafficLightState.kTrafficLightStates_Green;
+    }
     else
+    {
       Renderer.material = Red;
+      State = TrafficLightState.kTrafficLightStates_Red;
+    }
   }
 }
