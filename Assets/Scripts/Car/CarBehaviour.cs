@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AI_CarBehaviour : MonoBehaviour {
+public class CarBehaviour : MonoBehaviour {
 
 
   private enum CarStates
@@ -11,18 +11,26 @@ public class AI_CarBehaviour : MonoBehaviour {
     kCarState_Waiting
   }
 
+
+
   private struct CarConditions
   {
     // Searching State
     public bool IsSearching;
     // Driving State
     public bool IsDriving;
+    public bool IsGreenLightOn;
+    public bool IsObstacleDetected;
+    public bool IsReachedPoint;
     // Waiting State
     public bool IsWaiting;
   }
-
+ 
   private CarStates State;
   private CarConditions Condition;
+
+  // Test
+  public bool IsMovingLeft;
 
   void Start()
   {
@@ -30,6 +38,9 @@ public class AI_CarBehaviour : MonoBehaviour {
 
     Condition.IsSearching = true;
     Condition.IsDriving = false;
+    Condition.IsGreenLightOn = false;
+    Condition.IsObstacleDetected = false;
+    Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
   }
 
@@ -83,16 +94,25 @@ public class AI_CarBehaviour : MonoBehaviour {
   void Driving()
   {
     if (Condition.IsDriving)
-    {
-      transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
-      /*
-      if (ObstacleDetected && !GreenLightOn)
+    { 
+      if (Condition.IsObstacleDetected && !Condition.IsGreenLightOn)
       {
         Condition.IsDriving = false;
         Condition.IsWaiting = true;
         State = CarStates.kCarState_Waiting;
       }
-      */
+      else
+      {
+        // Test
+        if (IsMovingLeft)
+        {
+          transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
+        }
+        else
+        {
+          transform.Translate(Vector3.up * 1.0f * Time.deltaTime);
+        }
+      }
 
       /*
      if (ReachedPoint)
@@ -113,17 +133,23 @@ public class AI_CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsWaiting)
     {
-      /*
-      if (GreenLightOn)
-      {
+      if (Condition.IsGreenLightOn)
         Condition.IsWaiting = false;
-      }
-      */
     }
     else
     {
       Condition.IsDriving = true;
       State = CarStates.kCarState_Driving;
     }
+  }
+
+   public void SetIsGreenLightOn(bool result)
+  {
+    Condition.IsGreenLightOn = result;
+  }
+
+  public void SetIsObstacleDetected(bool result)
+  {
+    Condition.IsObstacleDetected = result;
   }
 }

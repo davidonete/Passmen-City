@@ -3,33 +3,58 @@ using System.Collections;
 
 public class CrossWalkDetection : MonoBehaviour {
 
-  private TrafficLight TrafficLightInstance;
-  private bool CanPass;
+  public TrafficLight TrafficLightReference;
+
+  private GameObject CarReference;
+  private bool IsCarWaiting;
 
   // Use this for initialization
-  void Start () {
-    GameObject tl = GameObject.Find("TrafficLight");
-    TrafficLightInstance = tl.GetComponent<TrafficLight>();
+  void Start ()
+  {
+    CarReference = null;
+    IsCarWaiting = false;
   }
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+  {
+    CarWaiting();
 	}
 
-  public bool GetCanPass()
+  void OnCollisionEnter(Collision car)
   {
-    return CanPass;
+    if(car.gameObject.tag == "Car")
+    {
+      car.gameObject.GetComponent<CarBehaviour>().SetIsObstacleDetected(true);
+
+      if (TrafficLightReference.GetTrafficLightState() == TrafficLight.TrafficLightState.kTrafficLightStates_Red)
+      {
+        car.gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);
+        CarReference = car.gameObject;
+        IsCarWaiting = true;
+      }
+      else
+        car.gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
+    }
   }
 
-  void OnCollisionEnter(Collision collider)
+  void OnCollisionExit(Collision car)
   {
-    if(collider.gameObject.tag == "Car")
+    if (car.gameObject.tag == "Car")
     {
-      if (TrafficLightInstance.GetTrafficLightState() == TrafficLight.TrafficLightState.kTrafficLightStates_Red)
-        CanPass = false;
-      else
-        CanPass = true;
+      car.gameObject.GetComponent<CarBehaviour>().SetIsObstacleDetected(false);
+    }
+  }
+
+  void CarWaiting()
+  {
+    if (IsCarWaiting)
+    {
+      if (TrafficLightReference.GetTrafficLightState() == TrafficLight.TrafficLightState.kTrafficLightStates_Green)
+      {
+        CarReference.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
+        IsCarWaiting = false;
+      }
     }
   }
 }

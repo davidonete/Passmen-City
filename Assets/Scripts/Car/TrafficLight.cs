@@ -8,6 +8,7 @@ public class TrafficLight : MonoBehaviour {
     kTrafficLightStates_Green,
     kTrafficLightStates_Red
   }
+
   private TrafficLightState State;
 
   public Material Red;
@@ -17,7 +18,7 @@ public class TrafficLight : MonoBehaviour {
   public float TimebetweenChanges;
   private float SaveTimebetweenChanges;
 
-  // Use this for initialization
+ 
   void Start () {
     SaveTimebetweenChanges = TimebetweenChanges;
 
@@ -25,7 +26,7 @@ public class TrafficLight : MonoBehaviour {
     RandomMaterial();
   }
 	
-	// Update is called once per frame
+
   void Update () {
     Timer();
   }
