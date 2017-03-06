@@ -22,15 +22,13 @@ public class CarBehaviour : MonoBehaviour {
     public bool IsGreenLightOn;
     public bool IsObstacleDetected;
     public bool IsReachedPoint;
+    public bool IsOtherCarNear;
     // Waiting State
     public bool IsWaiting;
   }
  
   private CarStates State;
   private CarConditions Condition;
-
-  // Test
-  public bool IsMovingLeft;
 
   void Start()
   {
@@ -42,6 +40,7 @@ public class CarBehaviour : MonoBehaviour {
     Condition.IsObstacleDetected = false;
     Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
+    Condition.IsOtherCarNear = false;
   }
 
   void Update()
@@ -104,14 +103,8 @@ public class CarBehaviour : MonoBehaviour {
       else
       {
         // Test
-        if (IsMovingLeft)
-        {
-          transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
-        }
-        else
-        {
-          transform.Translate(Vector3.up * 1.0f * Time.deltaTime);
-        }
+        if (!Condition.IsOtherCarNear)
+            transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
       }
 
       /*
@@ -143,7 +136,7 @@ public class CarBehaviour : MonoBehaviour {
     }
   }
 
-   public void SetIsGreenLightOn(bool result)
+  public void SetIsGreenLightOn(bool result)
   {
     Condition.IsGreenLightOn = result;
   }
@@ -151,5 +144,10 @@ public class CarBehaviour : MonoBehaviour {
   public void SetIsObstacleDetected(bool result)
   {
     Condition.IsObstacleDetected = result;
+  }
+
+  public void SetIsOtherCarNear(bool result)
+  {
+    Condition.IsOtherCarNear = result;
   }
 }
