@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrafficLight : MonoBehaviour {
+public class TrafficLightBehaviour : MonoBehaviour {
 
   public enum TrafficLightState
   {
@@ -19,27 +19,18 @@ public class TrafficLight : MonoBehaviour {
   private float SaveTimebetweenChanges;
 
  
-  void Start () {
+  void Start ()
+  {
     SaveTimebetweenChanges = TimebetweenChanges;
 
     Renderer = GetComponent<Renderer>();
-    RandomMaterial();
-  }
-	
-
-  void Update () {
-    Timer();
+    RandomState();
   }
 
-  public TrafficLightState GetTrafficLightState()
-  {
-    return State;
-  }
-
-  void RandomMaterial()
+  void RandomState()
   {
     int number = Random.Range(0, 2);
-   
+
     if (number == 0)
     {
       Renderer.material = Red;
@@ -52,17 +43,39 @@ public class TrafficLight : MonoBehaviour {
     }
   }
 
+  void Update ()
+  {
+    StateMachine();
+  }
+
+  void StateMachine()
+  {
+    switch (State)
+    {
+      case TrafficLightState.kTrafficLightStates_Green:
+        Timer();
+        break;
+
+      case TrafficLightState.kTrafficLightStates_Red:
+        Timer();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   void Timer()
   {
     TimebetweenChanges -= Time.deltaTime;
     if (TimebetweenChanges < 0)
     {
-      ChangeMaterial();
+      ChangeState();
       TimebetweenChanges = SaveTimebetweenChanges;
     }
   }
 
-  void ChangeMaterial()
+  void ChangeState()
   {
     if (Renderer.material.name.Substring(0, Renderer.material.name.Length - 11) == Red.name)
     {
@@ -74,5 +87,10 @@ public class TrafficLight : MonoBehaviour {
       Renderer.material = Red;
       State = TrafficLightState.kTrafficLightStates_Red;
     }
+  }
+
+  public TrafficLightState GetTrafficLightState()
+  {
+    return State;
   }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CrossWalkDetection : MonoBehaviour {
 
-  public TrafficLight TrafficLightReference;
+  public TrafficLightBehaviour TrafficLightReference;
 
   private GameObject CarReference;
   private bool IsCarWaiting;
@@ -27,7 +27,7 @@ public class CrossWalkDetection : MonoBehaviour {
     {
       car.gameObject.GetComponent<CarBehaviour>().SetIsObstacleDetected(true);
 
-      if (TrafficLightReference.GetTrafficLightState() == TrafficLight.TrafficLightState.kTrafficLightStates_Red)
+      if (TrafficLightReference.GetTrafficLightState() == TrafficLightBehaviour.TrafficLightState.kTrafficLightStates_Red)
       {
         car.gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);
         CarReference = car.gameObject;
@@ -50,7 +50,7 @@ public class CrossWalkDetection : MonoBehaviour {
   {
     if (IsCarWaiting)
     {
-      if (TrafficLightReference.GetTrafficLightState() == TrafficLight.TrafficLightState.kTrafficLightStates_Green)
+      if (TrafficLightReference.GetTrafficLightState() == TrafficLightBehaviour.TrafficLightState.kTrafficLightStates_Green)
       {
         CarReference.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
         IsCarWaiting = false;
