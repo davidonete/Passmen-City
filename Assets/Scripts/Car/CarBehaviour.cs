@@ -11,8 +11,6 @@ public class CarBehaviour : MonoBehaviour {
     kCarState_Waiting
   }
 
-
-
   private struct CarConditions
   {
     // Searching State
@@ -20,7 +18,7 @@ public class CarBehaviour : MonoBehaviour {
     // Driving State
     public bool IsDriving;
     public bool IsGreenLightOn;
-    public bool IsObstacleDetected;
+    public bool IsCrossWalkDetected;
     public bool IsReachedPoint;
     public bool IsOtherCarNear;
     // Waiting State
@@ -37,7 +35,7 @@ public class CarBehaviour : MonoBehaviour {
     Condition.IsSearching = true;
     Condition.IsDriving = false;
     Condition.IsGreenLightOn = false;
-    Condition.IsObstacleDetected = false;
+    Condition.IsCrossWalkDetected = false;
     Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
     Condition.IsOtherCarNear = false;
@@ -94,7 +92,7 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsDriving)
     { 
-      if (Condition.IsObstacleDetected && !Condition.IsGreenLightOn)
+      if (Condition.IsCrossWalkDetected && !Condition.IsGreenLightOn)
       {
         Condition.IsDriving = false;
         Condition.IsWaiting = true;
@@ -141,9 +139,9 @@ public class CarBehaviour : MonoBehaviour {
     Condition.IsGreenLightOn = result;
   }
 
-  public void SetIsObstacleDetected(bool result)
+  public void SetIsCrossWalkDetected(bool result)
   {
-    Condition.IsObstacleDetected = result;
+    Condition.IsCrossWalkDetected = result;
   }
 
   public void SetIsOtherCarNear(bool result)
