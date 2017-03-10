@@ -14,7 +14,7 @@ public class AI_PersonBehavior : MonoBehaviour
 
   private AStarSearch mAStar;
 
-  private static float mMinDistance = 0.4f;
+  private static float mMinDistance = 0.04f;
 
   private static float mVelocity = 0.02f;
 
@@ -27,8 +27,9 @@ public class AI_PersonBehavior : MonoBehaviour
   {
     if (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
     {
-      transform.position += (mNextStep - transform.position).normalized * mVelocity;
-      //Debug.Log("[]");
+      //transform.position += (mNextStep - transform.position).normalized * mVelocity;
+      transform.position = Vector3.MoveTowards(transform.position, mNextStep, Time.deltaTime * 22.0f);
+      Debug.Log(transform.position + " | " + mNextStep);
     }
     else
     {
@@ -40,6 +41,7 @@ public class AI_PersonBehavior : MonoBehaviour
       }
       else
       {
+        transform.position = mNextStep;
         FindNewObjective();
       }
     }
@@ -47,6 +49,7 @@ public class AI_PersonBehavior : MonoBehaviour
 
   private void FindNewObjective()
   {
+    const float minDistance = 0.1f;
     if (WaypointsExample.CarsGraph.NodesCount() > 0)
     {
       Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
@@ -56,15 +59,16 @@ public class AI_PersonBehavior : MonoBehaviour
       Debug.Log("Start: " + start + "| End: " + end);
       indexStep = 0;
       mNextStep = end;
-      while (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
+      
+      while (Vector3.Distance(transform.position, mNextStep) > minDistance)
       {
         indexStep++;
         path.Add(mNextStep);
         Debug.Log("Next " + mNextStep);
         mNextStep = mAStar.cameFrom[mNextStep];
-        Debug.Log("Next " + mNextStep);
+        //Debug.Log(Vector3.Distance(transform.position, mNextStep) + " | " + minDistance);
       }
-      Debug.Log(" ");
+      Debug.Log("**********************");
     }
   }
 }
