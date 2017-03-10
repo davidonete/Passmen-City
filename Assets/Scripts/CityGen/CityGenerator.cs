@@ -88,7 +88,6 @@ public class CityGenerator : MonoBehaviour
         {
             for (int x = -1; x < Width; x++)
             {
-                //Vector3 cPos = new Vector3(x * NodeSeparation, 0.0f, z * NodeSeparation);
                 Vector3 bPos = new Vector3( (x+0.5f) * NodeSeparation, 
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
@@ -116,7 +115,7 @@ public class CityGenerator : MonoBehaviour
                 nb.Add(n.Neighbors[j].OtherNode.transform.position, n.Neighbors[j].Distance);
             }
             // Add the node and nb to the grid
-            WaypointsExample.grid.AddNodeToGraph(n.transform.position, nb);
+            WaypointsExample.CarsGraph.AddNodeToGraph(n.transform.position, nb);
         }
     }
 }

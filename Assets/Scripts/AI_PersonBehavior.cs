@@ -47,11 +47,11 @@ public class AI_PersonBehavior : MonoBehaviour
 
   private void FindNewObjective()
   {
-    if (WaypointsExample.grid.NodesCount() > 0)
+    if (WaypointsExample.CarsGraph.NodesCount() > 0)
     {
-      Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.grid, transform.position);
-      end = AStarSearch.GetRandomWaypoint(WaypointsExample.grid);
-      mAStar = new AStarSearch(WaypointsExample.grid, start, end);
+      Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
+      end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
+      mAStar = new AStarSearch(WaypointsExample.CarsGraph, start, end);
 
       Debug.Log("Start: " + start + "| End: " + end);
       indexStep = 0;
