@@ -15,7 +15,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
     public float TimeBetweenChanges;
 
     // RedLight State
-    public bool IsPedestrianWalkingAcross;
+    public bool IsPedestrianWaiting;
   }
 
   private CrossWalkStates State;
@@ -28,7 +28,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
     State = CrossWalkStates.kCrossWalkStates_RedLight;
 
     Condition.TimeBetweenChanges = TimeBetweenChanges;
-    Condition.IsPedestrianWalkingAcross = false;
+    Condition.IsPedestrianWaiting = false;
   }
 	
 	// Update is called once per frame
@@ -56,16 +56,16 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
   void RedLight()
   {
-    if (Condition.TimeBetweenChanges <= 0.0f)
+    if (Condition.IsPedestrianWaiting)
     {
-      if (!Condition.IsPedestrianWalkingAcross)
+      if (Condition.TimeBetweenChanges <= 0.0f)
       {
         Condition.TimeBetweenChanges = TimeBetweenChanges;
         State = CrossWalkStates.kCrossWalkStates_GreenLight;
       }
+      else
+        Timer();
     }
-    else
-      Timer();
   }
 
   void GreenLight()
@@ -82,13 +82,24 @@ public class CrossWalkBehaviour : MonoBehaviour {
   void Timer()
   {
     if(Condition.TimeBetweenChanges > 0.0f)
-    {
       Condition.TimeBetweenChanges -= Time.deltaTime;
-    }
   }
+
+
+  // Setters & Getters
 
   public CrossWalkStates GetState()
   {
     return State;
+  }
+
+  public void SetIsPedestrianWaiting(bool result)
+  {
+    Condition.IsPedestrianWaiting = result;
+  }
+
+  public bool GetIsPedestrianWaiting()
+  {
+    return Condition.IsPedestrianWaiting;
   }
 }
