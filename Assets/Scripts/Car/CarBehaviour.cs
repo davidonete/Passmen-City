@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CarBehaviour : MonoBehaviour {
 
-
   private enum CarStates
   {
     kCarState_Searching,
@@ -92,7 +91,7 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsDriving)
     { 
-      if (Condition.IsCrossWalkDetected && !Condition.IsGreenLightOn)
+      if (Condition.IsCrossWalkDetected && Condition.IsGreenLightOn)
       {
         Condition.IsDriving = false;
         Condition.IsWaiting = true;
@@ -124,7 +123,7 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsWaiting)
     {
-      if (Condition.IsGreenLightOn)
+      if (!Condition.IsGreenLightOn)
         Condition.IsWaiting = false;
     }
     else
@@ -134,9 +133,16 @@ public class CarBehaviour : MonoBehaviour {
     }
   }
 
+  // Setters & Getters
+
   public void SetIsGreenLightOn(bool result)
   {
     Condition.IsGreenLightOn = result;
+  }
+
+  public bool GetIsGreenLightOn()
+  {
+    return Condition.IsGreenLightOn;
   }
 
   public void SetIsCrossWalkDetected(bool result)
