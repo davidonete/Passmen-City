@@ -18,6 +18,8 @@ public class NodeNeighbors
 /// </summary>
 public class Node : MonoBehaviour
 {
+  public Color DebugColor;
+
   //Set the node walcable or not
   private bool mWalcable = true;
 
@@ -45,7 +47,7 @@ public class Node : MonoBehaviour
 
   void OnDrawGizmos()
   {
-    Gizmos.color = Color.red;
+    Gizmos.color = DebugColor;
     Gizmos.DrawSphere(transform.position, 0.75f);
     foreach (NodeNeighbors go in mNeighbors)
     {
