@@ -40,7 +40,7 @@ public class PedestrianBehavior : MonoBehaviour
         {
             if (IsLeader())
                 MoveToMouseClick();
-            else if (GetLeader() == null)
+            else
                 RigidBody.velocity = gameObject.transform.forward.normalized * MovementSpeed;
         }
     }
@@ -103,7 +103,6 @@ public class PedestrianBehavior : MonoBehaviour
 
     void MoveToMouseClick()
     {
-        Debug.Log(mMovementDirection);
         RigidBody.velocity = mMovementDirection * MovementSpeed;
         if (Input.GetMouseButtonDown(0))
         {

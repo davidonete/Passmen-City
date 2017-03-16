@@ -7,6 +7,8 @@ public class CrowdController : MonoBehaviour
     //The time between each crowd iteration check
     public float IterationTime = 1.0f;
 
+    public float SeparationDistance = 0.5f;
+
     bool mInitialized;
     float mCurrentIterationTime;
     PedestrianBehavior[] mAgents;
@@ -55,8 +57,9 @@ public class CrowdController : MonoBehaviour
             {
                 Vector3 finalVelocity = Vector3.zero;
                 finalVelocity += Cohesion(mAgents[i]);
+                finalVelocity += Separation(mAgents[i]);
 
-                mAgents[i].RigidBody.velocity = finalVelocity;
+                mAgents[i].RigidBody.velocity += finalVelocity;
             }
         }
     }
@@ -87,6 +90,34 @@ public class CrowdController : MonoBehaviour
             forceVector.Normalize();
         }
 
+        return forceVector;
+    }
+
+    Vector3 Separation(PedestrianBehavior agent)
+    {
+        Vector3 forceVector = Vector3.zero;
+
+        List<GameObject> neighbours = agent.GetNeighbours();
+        for (int i = 0; i < neighbours.Count; i++)
+        {
+            // Discard self checking
+            if (neighbours[i] != agent.gameObject)
+            {
+                // Distance squared
+                float distance = (neighbours[i].transform.position - agent.transform.position).magnitude;
+                if(distance < SeparationDistance)
+                {
+                    // Calculate the heading vector between the source entity and its neighbour
+                    Vector3 headingVector = agent.transform.position - neighbours[i].transform.position;
+
+                    // Calculate the scale value
+                    float scale = headingVector.magnitude / (float)Mathf.Sqrt(SeparationDistance);
+
+                    //The closer we are the more intense the force vector will be
+                    forceVector = Vector3.Normalize(headingVector) / scale;
+                }
+            }
+        }
         return forceVector;
     }
 }
