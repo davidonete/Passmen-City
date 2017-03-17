@@ -72,8 +72,11 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if (Condition.TimeBetweenChanges <= 0.0f)
     {
-      Condition.TimeBetweenChanges = TimeBetweenChanges;
-      State = CrossWalkStates.kCrossWalkStates_RedLight;
+      if (!Condition.IsPedestrianWaiting)
+      {
+        Condition.TimeBetweenChanges = TimeBetweenChanges;
+        State = CrossWalkStates.kCrossWalkStates_RedLight;
+      }
     }
     else
       Timer();
