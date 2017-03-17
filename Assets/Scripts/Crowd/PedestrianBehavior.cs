@@ -12,8 +12,8 @@ public class PedestrianBehavior : MonoBehaviour
     GameObject mLeader;
     List<GameObject> mNeighbours;
 
-    public Rigidbody RigidBody;
-    Vector3 mMovementDirection;
+    Rigidbody RigidBody;
+    public Vector3 Velocity;
 
     void Start()
     {
@@ -24,9 +24,9 @@ public class PedestrianBehavior : MonoBehaviour
     public void Init()
     {
         mLeader = null;
-        mMovementDirection = Vector3.zero;
         mNeighbours = new List<GameObject>();
         RigidBody = gameObject.GetComponent<Rigidbody>();
+        Velocity = transform.forward;
 
         ConvertToLeader(StartAsLeader);
 
@@ -38,10 +38,8 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (mInitialized)
         {
-            if (IsLeader())
-                MoveToMouseClick();
-            else
-                RigidBody.velocity = gameObject.transform.forward.normalized * MovementSpeed;
+            //mRigidBody.velocity = Vector3.Lerp(mRigidBody.velocity, MovementDirection * MovementSpeed, Time.deltaTime);
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime));
         }
     }
 
@@ -103,15 +101,15 @@ public class PedestrianBehavior : MonoBehaviour
 
     void MoveToMouseClick()
     {
-        RigidBody.velocity = mMovementDirection * MovementSpeed;
+        RigidBody.velocity = Velocity * MovementSpeed;
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                mMovementDirection = hit.point - gameObject.transform.position;
-                mMovementDirection.Normalize();
+                Velocity = hit.point - gameObject.transform.position;
+                Velocity.Normalize();
             }
         }
     }

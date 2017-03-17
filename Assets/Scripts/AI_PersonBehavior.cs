@@ -4,71 +4,44 @@ using System.Collections.Generic;
 
 public class AI_PersonBehavior : MonoBehaviour
 {
-  private Vector3 mNextStep;
+	private const float mMinDistance = 0.04f;
 
-  private Vector3 end;
+	private const float mVelocity = 2.0f;
 
-  private List<Vector3> path = new List<Vector3>();
+	private Vector3 mNextStep;
 
-  private int indexStep;
+	private List<Vector3> mPath = new List<Vector3>();
 
-  private AStarSearch mAStar;
+	void Start()
+	{
+		Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
+		Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
+		mPath = AStarSearch.FindNewObjective(start, end, WaypointsExample.CarsGraph);
+		if (mPath.Count > 0) mNextStep = mPath[mPath.Count - 1];
+	}
 
-  private static float mMinDistance = 0.04f;
+	void Update()
+	{
+		if (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, mNextStep, Time.deltaTime * mVelocity);
+		}
+		else
+		{
+			if (mPath.Count > 0) mPath.RemoveAt(mPath.Count - 1);
+			if (mPath.Count > 0)
+			{
+				mNextStep = mPath[mPath.Count - 1];
+			}
+			else
+			{
+				transform.position = mNextStep;
 
-  private static float mVelocity = 0.02f;
-
-  void Start()
-  {
-    FindNewObjective();
-  }
-
-  void Update()
-  {
-    if (Vector3.Distance(transform.position, mNextStep) > mMinDistance)
-    {
-      //transform.position += (mNextStep - transform.position).normalized * mVelocity;
-      transform.position = Vector3.MoveTowards(transform.position, mNextStep, Time.deltaTime * 22.0f);
-      Debug.Log(transform.position + " | " + mNextStep);
-    }
-    else
-    {
-      if (indexStep > 0)
-      {
-        indexStep--;
-        mNextStep = path[indexStep];
-        //Debug.Log("[X: " + mNextStep.x + "] [Y: " + mNextStep.y + "] [Z: " + mNextStep.z + "]");
-      }
-      else
-      {
-        transform.position = mNextStep;
-        FindNewObjective();
-      }
-    }
-  }
-
-  private void FindNewObjective()
-  {
-    const float minDistance = 0.1f;
-    if (WaypointsExample.CarsGraph.NodesCount() > 0)
-    {
-      Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
-      end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
-      mAStar = new AStarSearch(WaypointsExample.CarsGraph, start, end);
-
-      Debug.Log("Start: " + start + "| End: " + end);
-      indexStep = 0;
-      mNextStep = end;
-      
-      while (Vector3.Distance(transform.position, mNextStep) > minDistance)
-      {
-        indexStep++;
-        path.Add(mNextStep);
-        Debug.Log("Next " + mNextStep);
-        mNextStep = mAStar.cameFrom[mNextStep];
-        //Debug.Log(Vector3.Distance(transform.position, mNextStep) + " | " + minDistance);
-      }
-      Debug.Log("**********************");
-    }
-  }
+				Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
+				Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
+				mPath = AStarSearch.FindNewObjective(start, end, WaypointsExample.CarsGraph);
+				if (mPath.Count > 0) mNextStep = mPath[mPath.Count - 1];
+			}
+		}
+	}
 }
