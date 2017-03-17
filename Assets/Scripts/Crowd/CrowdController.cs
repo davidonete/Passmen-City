@@ -57,9 +57,9 @@ public class CrowdController : MonoBehaviour
             {
                 Vector3 finalVelocity = Vector3.zero;
                 finalVelocity += Cohesion(mAgents[i]);
-                finalVelocity += Separation(mAgents[i]);
+                //finalVelocity += Separation(mAgents[i]);
 
-                mAgents[i].RigidBody.velocity += finalVelocity;
+                mAgents[i].Velocity += finalVelocity;
             }
         }
     }
@@ -104,20 +104,22 @@ public class CrowdController : MonoBehaviour
             if (neighbours[i] != agent.gameObject)
             {
                 // Distance squared
-                float distance = (neighbours[i].transform.position - agent.transform.position).magnitude;
+                float distance = Mathf.Pow(Vector3.Distance(neighbours[i].transform.position, agent.transform.position), 2.0f);
                 if(distance < SeparationDistance)
                 {
                     // Calculate the heading vector between the source entity and its neighbour
                     Vector3 headingVector = agent.transform.position - neighbours[i].transform.position;
 
                     // Calculate the scale value
-                    float scale = headingVector.magnitude / (float)Mathf.Sqrt(SeparationDistance);
-
+                    float scale = 1.0f;//headingVector.magnitude / (float)Mathf.Sqrt(SeparationDistance);
+                    scale = 1.0f - (headingVector.magnitude/SeparationDistance);
+                    scale = Mathf.Max(scale, 0.001f);
                     //The closer we are the more intense the force vector will be
-                    forceVector = Vector3.Normalize(headingVector) / scale;
+                    forceVector = Vector3.Normalize(headingVector / scale);
                 }
             }
         }
+        Debug.Log("Forward: " + agent.transform.forward + " ForceVector: " + forceVector + " Velocity: " + agent.Velocity);
         return forceVector;
     }
 }
