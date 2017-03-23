@@ -63,6 +63,7 @@ public class PriorityQueue<Vector3>
     {
       return mItem1;
     }
+
     public double Item2()
     {
       return mItem2;
@@ -140,7 +141,7 @@ public class AStarSearch
 		}
 	}
 
-	public static List<Vector3> FindNewObjective(Vector3 start, Vector3 end, Graph graph)
+	public static List<Vector3> FindNewObjective(Graph graph, Vector3 start, Vector3 end)
 	{
 		List<Vector3> path = new List<Vector3>();
 		if (graph.NodesCount() > 0)

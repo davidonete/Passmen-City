@@ -16,7 +16,7 @@ public class AI_PersonBehavior : MonoBehaviour
 	{
 		Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
 		Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
-		mPath = AStarSearch.FindNewObjective(start, end, WaypointsExample.CarsGraph);
+		mPath = AStarSearch.FindNewObjective(WaypointsExample.CarsGraph, start, end);
 		if (mPath.Count > 0) mNextStep = mPath[mPath.Count - 1];
 	}
 
@@ -39,8 +39,8 @@ public class AI_PersonBehavior : MonoBehaviour
 
 				Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
 				Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
-				mPath = AStarSearch.FindNewObjective(start, end, WaypointsExample.CarsGraph);
-				if (mPath.Count > 0) mNextStep = mPath[mPath.Count - 1];
+				mPath = AStarSearch.FindNewObjective(WaypointsExample.CarsGraph, start, end);
+        if (mPath.Count > 0) mNextStep = mPath[mPath.Count - 1];
 			}
 		}
 	}

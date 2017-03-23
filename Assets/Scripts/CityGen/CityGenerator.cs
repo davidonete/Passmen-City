@@ -44,7 +44,7 @@ public class CityGenerator : MonoBehaviour
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
                 float h = Random.Range(1.0f, 1.0f);
                 float w = Random.Range(1.0f, 1.0f);
-                Debug.Log(h + "," + w);
+                //Debug.Log(h + "," + w);
                 b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h,w);
             }
         }
