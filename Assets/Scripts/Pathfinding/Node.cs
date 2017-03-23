@@ -18,40 +18,40 @@ public class NodeNeighbors
 /// </summary>
 public class Node : MonoBehaviour
 {
-  public Color DebugColor;
+    public Color DebugColor;
 
-  //Set the node walcable or not
-  private bool mWalcable = true;
+    //Set the node walcable or not
+    private bool mWalcable = true;
 
-  // A list of nodes conected to this node
-  [SerializeField]
-  private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
+    // A list of nodes conected to this node
+    [SerializeField]
+    private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
 
-  public bool Walcable
-  {
-    get { return mWalcable; }
-    set { mWalcable = value; }
-  }
-
-  public List<NodeNeighbors> Neighbors
-  {
-    get { return mNeighbors; }
-    set { mNeighbors = value; }
-  }
-
-  //Add a node to the list of neighbors
-  public void AddNeighbor(NodeNeighbors node)
-  {
-    mNeighbors.Add(node);
-  }
-
-  void OnDrawGizmos()
-  {
-    Gizmos.color = DebugColor;
-    Gizmos.DrawSphere(transform.position, 0.75f);
-    foreach (NodeNeighbors go in mNeighbors)
+    public bool Walcable
     {
-      Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
+        get { return mWalcable; }
+        set { mWalcable = value; }
     }
-  }
+
+    public List<NodeNeighbors> Neighbors
+    {
+        get { return mNeighbors; }
+        set { mNeighbors = value; }
+    }
+
+    //Add a node to the list of neighbors
+    public void AddNeighbor(NodeNeighbors node)
+    {
+        mNeighbors.Add(node);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = DebugColor;
+        Gizmos.DrawSphere(transform.position, 0.75f);
+        foreach (NodeNeighbors go in mNeighbors)
+        {
+            Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
+        }
+    }
 }

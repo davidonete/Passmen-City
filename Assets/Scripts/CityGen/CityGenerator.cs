@@ -23,12 +23,12 @@ public class CityGenerator : MonoBehaviour
         // Initialize the nodes
         InitializeCarNodes();
         InitializePedestrianNodes();
-        
+
         // Generate the city
         AddBuildings();
 
         // Fill the graphs
-        FillGraph(ref WaypointsExample.CarsGraph,ref CarNodes);
+        FillGraph(ref WaypointsExample.CarsGraph, ref CarNodes);
         //FillGraph(WaypointsExample.PedestriansGraph, PedestrianNodes);
     }
 
@@ -38,29 +38,29 @@ public class CityGenerator : MonoBehaviour
         {
             for (int x = 0; x < Width; x++)
             {
-                Vector3 bPos = new Vector3( (x+0.5f) * NodeSeparation, 
+                Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
-                GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity)as GameObject;
+                GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity) as GameObject;
                 float h = Random.Range(1.0f, 1.0f);
                 float w = Random.Range(1.0f, 1.0f);
                 //Debug.Log(h + "," + w);
-                b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h,w);
+                b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h, w);
             }
         }
     }
 
-    void FillGraph(ref Graph graph,ref List<GameObject> nodes)
+    void FillGraph(ref Graph graph, ref List<GameObject> nodes)
     {
         // For each generated node
-        for(int i=0;i<nodes.Count;i++)
+        for (int i = 0; i < nodes.Count; i++)
         {
             Node n = nodes[i].GetComponent<Node>();
             if (!n) Debug.LogWarning("This object does not have a node component.");
 
             // Build a list of the neighbours of this node
             Dictionary<Vector3, double> nb = new Dictionary<Vector3, double>();
-            for (int j = 0;j<n.Neighbors.Count;j++)
+            for (int j = 0; j < n.Neighbors.Count; j++)
             {
                 nb.Add(n.Neighbors[j].OtherNode.transform.position, n.Neighbors[j].Distance);
             }
@@ -91,7 +91,7 @@ public class CityGenerator : MonoBehaviour
             {
                 int idx = x * Width + z;
                 // Top link 
-                if(z<Width-1)
+                if (z < Width - 1)
                 {
                     int curI = x * Width + (z + 1);
                     NodeNeighbors nn = new NodeNeighbors();
@@ -101,7 +101,7 @@ public class CityGenerator : MonoBehaviour
                     CarNodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
                 // Bottom link
-                if(z>0)
+                if (z > 0)
                 {
                     int curI = x * Width + (z - 1);
                     NodeNeighbors nn = new NodeNeighbors();
@@ -111,7 +111,7 @@ public class CityGenerator : MonoBehaviour
                     CarNodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
                 // Right link
-                if(x<Width-1)
+                if (x < Width - 1)
                 {
                     int curI = (x + 1) * Width + z;
                     NodeNeighbors nn = new NodeNeighbors();
@@ -121,7 +121,7 @@ public class CityGenerator : MonoBehaviour
                     CarNodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
                 // Left link
-                if(x>0)
+                if (x > 0)
                 {
                     int curI = (x - 1) * Width + z;
                     NodeNeighbors nn = new NodeNeighbors();
@@ -134,6 +134,10 @@ public class CityGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// We iterate through the grid nodes and generate pedestrian links. For each
+    /// iteration we generate bottom row and then we generate the top row
+    /// </summary>
     void InitializePedestrianNodes()
     {
         // To-Do: proper building size
@@ -142,51 +146,24 @@ public class CityGenerator : MonoBehaviour
         // Fill nodes
         for (int z = 0; z < Width; z++)
         {
-            for (int x = 0; x < Width; x++)
-            {
-                Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
-                                            0.0f,
-                                            (z + 0.5f) * NodeSeparation);
-                // Br node
-                GameObject n = GameObject.Instantiate(Node);
-                n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-                n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
-                n.GetComponent<Node>().DebugColor = Color.blue;
-                PedestrianNodes.Add(n);
-
-                // Br node
-                n = GameObject.Instantiate(Node);
-                n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-                n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z - nodeOff.z);
-                n.GetComponent<Node>().DebugColor = Color.blue;
-                PedestrianNodes.Add(n);
-
-                // Tr node
-                n = GameObject.Instantiate(Node);
-                n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-                n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z + nodeOff.z);
-                n.GetComponent<Node>().DebugColor = Color.blue;
-                PedestrianNodes.Add(n);
-
-                // Tl node
-                n = GameObject.Instantiate(Node);
-                n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-                n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
-                n.GetComponent<Node>().DebugColor = Color.blue;
-                PedestrianNodes.Add(n);
-            }
+            /*
+            for (int x = 0; x < Width; x++){}
+            */
+            FillPedestrianBottomNodes(z);
+            FillPedestrianTopNodes(z);
         }
 
         // Link Nodes
-        for (int z = 0; z < Width * 2.0f; z++)
+        int width2 = Width * 2;
+        for (int z = 0; z < width2; z++)
         {
-            for (int x = 0; x < Width * 2.0f; x++)
+            for (int x = 0; x < width2; x++)
             {
-                int idx = x * (Width * 2) + z;
+                int idx = x * width2 + z;
                 // Top link 
-                if (z < Width - 1)
+                if (z < width2 - 1)
                 {
-                    int curI = x * (Width * 2) + (z + 1);
+                    int curI = x * width2 + (z + 1);
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = PedestrianNodes[curI];
                     nn.Distance = Vector3.Distance(PedestrianNodes[idx].transform.position,
@@ -196,7 +173,7 @@ public class CityGenerator : MonoBehaviour
                 // Bottom link
                 if (z > 0)
                 {
-                    int curI = x * (Width * 2) + (z - 1);
+                    int curI = x * width2 + (z - 1);
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = PedestrianNodes[curI];
                     nn.Distance = Vector3.Distance(PedestrianNodes[idx].transform.position,
@@ -204,9 +181,9 @@ public class CityGenerator : MonoBehaviour
                     PedestrianNodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
                 // Right link
-                if (x < Width - 1)
+                if (x < width2 - 1)
                 {
-                    int curI = (x + 1) * (Width * 2) + z;
+                    int curI = (x + 1) * width2 + z;
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = PedestrianNodes[curI];
                     nn.Distance = Vector3.Distance(PedestrianNodes[idx].transform.position,
@@ -216,7 +193,7 @@ public class CityGenerator : MonoBehaviour
                 // Left link
                 if (x > 0)
                 {
-                    int curI = (x - 1) * (Width * 2) + z;
+                    int curI = (x - 1) * width2 + z;
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = PedestrianNodes[curI];
                     nn.Distance = Vector3.Distance(PedestrianNodes[idx].transform.position,
@@ -226,4 +203,58 @@ public class CityGenerator : MonoBehaviour
             }
         }
     }
+
+    void FillPedestrianBottomNodes(int z)
+    {
+        Vector3 nodeOff = new Vector3(0.5f, 0.0f, 0.5f) * 1.25f;
+
+        for (int x = 0; x < Width; x++)
+        {
+            Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
+                                        0.0f,
+                                        (z + 0.5f) * NodeSeparation);
+            GameObject n;
+            // Bl node
+            n = GameObject.Instantiate(Node);
+            n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
+            n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
+            n.GetComponent<Node>().DebugColor = Color.blue;
+            PedestrianNodes.Add(n);
+
+            // Br node
+            n = GameObject.Instantiate(Node);
+            n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
+            n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z - nodeOff.z);
+            n.GetComponent<Node>().DebugColor = Color.blue;
+            PedestrianNodes.Add(n);
+        }
+    }
+
+    void FillPedestrianTopNodes(int z)
+    {
+        Vector3 nodeOff = new Vector3(0.5f, 0.0f, 0.5f) * 1.25f;
+
+        for (int x = 0; x < Width; x++)
+        {
+            Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
+                                            0.0f,
+                                            (z + 0.5f) * NodeSeparation);
+            GameObject n;
+
+            // Tl node
+            n = GameObject.Instantiate(Node);
+            n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
+            n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
+            n.GetComponent<Node>().DebugColor = Color.blue;
+            PedestrianNodes.Add(n);
+
+            // Tr node
+            n = GameObject.Instantiate(Node);
+            n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
+            n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z + nodeOff.z);
+            n.GetComponent<Node>().DebugColor = Color.blue;
+            PedestrianNodes.Add(n);
+        }
+    }
 }
+
