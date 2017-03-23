@@ -42,7 +42,7 @@ public class CityGenerator : MonoBehaviour
                                             0.0f,
                                             (z + 0.5f) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity) as GameObject;
-                float h = Random.Range(1.0f, 1.0f);
+                float h = (Mathf.PerlinNoise(z * 10.5f, x * 10.5f) * 5.0f);
                 float w = Random.Range(1.0f, 1.0f);
                 //Debug.Log(h + "," + w);
                 b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h, w);
@@ -219,6 +219,7 @@ public class CityGenerator : MonoBehaviour
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
+            n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
 
             // Br node
@@ -226,6 +227,7 @@ public class CityGenerator : MonoBehaviour
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
+            n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
         }
     }
@@ -246,6 +248,7 @@ public class CityGenerator : MonoBehaviour
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
+            n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
 
             // Tr node
@@ -253,6 +256,7 @@ public class CityGenerator : MonoBehaviour
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
+            n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
         }
     }

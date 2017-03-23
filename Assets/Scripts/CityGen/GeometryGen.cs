@@ -36,7 +36,28 @@ public class GeometryGen
 
         float halfWidth = width * 0.5f;
         List<Vector3> vertices = new List<Vector3>();
-        Mesh mesh = mCubeMesh;
+        Mesh mesh = new Mesh();
+
+        // Copy vertices
+        List<Vector3> toCopyVertices = new List<Vector3>();
+        foreach(Vector3 ele in mCubeMesh.vertices)
+        {
+            toCopyVertices.Add(ele);
+        }
+        mesh.SetVertices(toCopyVertices);
+        
+        // Copy normals
+        List<Vector3> toCopyNormals = new List<Vector3>();
+        foreach (Vector3 ele in mCubeMesh.normals)
+        {
+            toCopyNormals.Add(ele);
+        }
+        mesh.SetNormals(toCopyNormals);
+
+        // Copy triangles
+        mesh.SetTriangles(mCubeMesh.triangles,0,true);
+        
+        // TO-DO: Copy UVs
 
         // Adjust vertex 
         for(int i=0;i<mesh.vertexCount;i++)

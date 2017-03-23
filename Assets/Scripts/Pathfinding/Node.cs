@@ -19,6 +19,7 @@ public class NodeNeighbors
 public class Node : MonoBehaviour
 {
     public Color DebugColor;
+    public float DebugSize = 0.75f;
 
     //Set the node walcable or not
     private bool mWalcable = true;
@@ -48,7 +49,7 @@ public class Node : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = DebugColor;
-        Gizmos.DrawSphere(transform.position, 0.75f);
+        Gizmos.DrawSphere(transform.position, DebugSize);
         foreach (NodeNeighbors go in mNeighbors)
         {
             Gizmos.DrawLine(transform.position, go.OtherNode.transform.position);
