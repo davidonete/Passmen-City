@@ -29,7 +29,7 @@ public class CityGenerator : MonoBehaviour
 
         // Fill the graphs
         FillGraph(ref WaypointsExample.CarsGraph, ref CarNodes);
-        //FillGraph(WaypointsExample.PedestriansGraph, PedestrianNodes);
+        FillGraph(ref WaypointsExample.PedestriansGraph, ref PedestrianNodes);
     }
 
     void AddBuildings()
