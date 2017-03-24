@@ -21,19 +21,10 @@ public class Node : MonoBehaviour
     public Color DebugColor;
     public float DebugSize = 0.75f;
 
-    //Set the node walcable or not
-    private bool mWalcable = true;
-
     // A list of nodes conected to this node
     [SerializeField]
     private List<NodeNeighbors> mNeighbors = new List<NodeNeighbors>();
-
-    public bool Walcable
-    {
-        get { return mWalcable; }
-        set { mWalcable = value; }
-    }
-
+  
     public List<NodeNeighbors> Neighbors
     {
         get { return mNeighbors; }
