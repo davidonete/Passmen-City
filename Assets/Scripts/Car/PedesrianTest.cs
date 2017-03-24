@@ -41,7 +41,7 @@ public class PedesrianTest : MonoBehaviour {
     {
       if (hit.collider.gameObject.tag == "CrossWalk")
       {
-        if(hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetNumberOfPedestriansCrossing() == 0)
+        if(hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkConditions.NumberOfPedestriansCrossing == 0)
           hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().SetIsPedestrianWaiting(true);
       }
         

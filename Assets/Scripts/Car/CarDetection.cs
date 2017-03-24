@@ -27,7 +27,7 @@ public class CarDetection : MonoBehaviour {
       {
         gameObject.GetComponent<CarBehaviour>().SetIsCrossWalkDetected(true);
 
-        if (hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetState() == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+        if (hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
           gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
         else
           gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);

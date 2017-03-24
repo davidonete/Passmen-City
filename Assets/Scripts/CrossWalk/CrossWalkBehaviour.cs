@@ -9,7 +9,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
     kCrossWalkStates_RedLight
   }
 
-  private struct CrossWalkConditions
+  public struct CrossWalkConditions
   {
     // Both States
     public float TimeBetweenChanges;
@@ -106,23 +106,30 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
     // Setters & Getters
 
-    public CrossWalkStates GetState()
-  {
-    return State;
-  }
-
   public void SetIsPedestrianWaiting(bool result)
   {
     Condition.IsPedestrianWaiting = result;
   }
 
-  public bool GetIsPedestrianWaiting()
+  public CrossWalkStates GetCrossWalkStates
   {
-    return Condition.IsPedestrianWaiting;
+    get { return State; }
+    set { State = value; }
   }
 
-  public int GetNumberOfPedestriansCrossing()
+  public CrossWalkConditions GetCrossWalkConditions
   {
-    return Condition.NumberOfPedestriansCrossing;
+    get { return Condition; }
+    set { Condition = value; }
   }
+
+    /* private bool mPaco;
+     public bool Paco
+     {
+         get { return mPaco; }
+         set { mPaco = value; }
+     }
+
+     this.Paco = true;
+     bool a = this.Paco;*/
 }

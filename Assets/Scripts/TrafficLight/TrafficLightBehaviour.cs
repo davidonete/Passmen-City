@@ -22,7 +22,7 @@ public class TrafficLightBehaviour : MonoBehaviour {
 
   void SelectMaterial()
   {
-    if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetState() == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+    if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
       Renderer.material = GreenMaterial;
     else
       Renderer.material = RedMaterial;
