@@ -5,7 +5,7 @@ public class NeighbourDetector : MonoBehaviour
 {
     PedestrianBehavior mParent;
 
-	void Start ()
+	void Awake ()
     {
         mParent = this.transform.parent.GetComponent<PedestrianBehavior>();
     }
