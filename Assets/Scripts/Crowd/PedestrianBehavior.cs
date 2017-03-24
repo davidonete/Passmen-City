@@ -4,133 +4,158 @@ using System.Collections.Generic;
 
 public class PedestrianBehavior : MonoBehaviour
 {
-  public bool StartAsLeader = false;
-  public float MovementSpeed = 1.0f;
+    bool StartAsLeader = false;
+    public float MovementSpeed = 1.0f;
 
-  bool mIsLeader;
-  bool mInitialized;
-  GameObject mLeader;
-  List<GameObject> mNeighbours;
+    bool mIsLeader;
+    bool mInitialized;
+    GameObject mLeader;
+    List<GameObject> mNeighbours;
 
-  Rigidbody RigidBody;
-  public Vector3 Velocity;
+    List<Vector3> mPath = new List<Vector3>();
+    Vector3 mNextLocation;
+    float mMinDistance = 0.04f;
 
-  void Start()
-  {
-    mInitialized = false;
-  }
+    Rigidbody RigidBody;
+    public Vector3 Velocity;
 
-  // Call this function whenever the game is ready, to start updating the GameObject
-  public void Init()
-  {
-    mLeader = null;
-    mNeighbours = new List<GameObject>();
-    RigidBody = gameObject.GetComponent<Rigidbody>();
-    Velocity = transform.forward;
-
-    ConvertToLeader(StartAsLeader);
-
-    //Begin updating the GameObject
-    mInitialized = true;
-  }
-
-  void Update()
-  {
-    if (mInitialized)
+    void Start()
     {
-      //mRigidBody.velocity = Vector3.Lerp(mRigidBody.velocity, MovementDirection * MovementSpeed, Time.deltaTime);
-      RigidBody.MovePosition(transform.position + (Velocity.normalized * Time.deltaTime * MovementSpeed));
-      Velocity.Normalize();
-    }
-    if (mIsLeader)
-      MoveToMouseClick();
-  }
-
-  bool IsLeader() { return mIsLeader; }
-
-  public GameObject GetLeader() { return mLeader; }
-
-  public void SetLeader(GameObject leader) { mLeader = leader; }
-
-  void ConvertToLeader(bool leader)
-  {
-    mLeader = null;
-    mIsLeader = leader;
-    mNeighbours.Clear();
-
-    //Add yourself to the flocking group (for computing)
-    if (mIsLeader)
-      mNeighbours.Add(gameObject);
-  }
-
-  public List<GameObject> GetNeighbours()
-  {
-    if (IsLeader())
-      return mNeighbours;
-
-    else if (GetLeader() != null)
-    {
-      PedestrianBehavior leader = GetLeader().GetComponent<PedestrianBehavior>();
-      return leader.GetNeighbours();
+        mInitialized = false;
     }
 
-    return null;
-  }
-
-  public void AddNeighbour(GameObject agent)
-  {
-    if (IsLeader() && !mNeighbours.Contains(agent))
+    // Call this function whenever the game is ready, to start updating the GameObject
+    public void Init()
     {
-      PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
-      if (agentBehavior.GetLeader() == null)
-      {
-        agentBehavior.SetLeader(gameObject);
-        mNeighbours.Add(agent);
-      }
-    }
-    // TO-DO: Autogenerate leader of the flocking group
-  }
+        mLeader = null;
+        mNeighbours = new List<GameObject>();
+        RigidBody = gameObject.GetComponent<Rigidbody>();
+        Velocity = transform.forward;
 
-  public void RemoveNeighbour(GameObject agent)
-  {
-    PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
-    if (IsLeader() && mNeighbours.Contains(agent))
+        ConvertToLeader(StartAsLeader);
+
+        //Start pathfinding (get nearest point and get a random point)
+        GetNewPath();
+        GetNextLocationStep();
+
+        //Begin updating the GameObject
+        mInitialized = true;
+    }
+
+    void Update()
     {
-      agentBehavior.SetLeader(null);
-      mNeighbours.Remove(agent);
+        if (mInitialized)
+        {
+            //If the agent is affected by flocking
+            if (GetLeader())
+                RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
+            else
+                UpdatePathfindingMovement();
+        }
+        if (mIsLeader)
+            MoveToMouseClick();
     }
-    // TO-DO: Autogenerate leader of the flocking group
-  }
 
-  void MoveToMouseClick()
-  {
-    //RigidBody.velocity = Velocity * MovementSpeed;
-    if (Input.GetMouseButtonDown(0))
+    bool IsLeader() { return mIsLeader; }
+
+    public GameObject GetLeader() { return mLeader; }
+
+    public void SetLeader(GameObject leader) { mLeader = leader; }
+
+    void ConvertToLeader(bool leader)
     {
-      RaycastHit hit;
-      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      if (Physics.Raycast(ray, out hit))
-      {
-        Velocity = hit.point - gameObject.transform.position;
-        Velocity.Normalize();
-      }
+        mLeader = null;
+        mIsLeader = leader;
+        mNeighbours.Clear();
+
+        //Add yourself to the flocking group (for computing)
+        if (mIsLeader)
+            mNeighbours.Add(gameObject);
     }
-  }
 
-  // Alignment is a behavior that causes a particular agent to line up with agents close by
-  Vector3 ComputeAligment()
-  {
-    return Vector3.zero;
-  }
+    public List<GameObject> GetNeighbours()
+    {
+        if (IsLeader())
+            return mNeighbours;
 
-  // Cohesion is a behavior that causes agents to steer towards a "center of mass"
-  Vector3 ComputeCohesion(GameObject entity)
-  {
-    return Vector3.zero;
-  }
+        else if (GetLeader() != null)
+        {
+            PedestrianBehavior leader = GetLeader().GetComponent<PedestrianBehavior>();
+            return leader.GetNeighbours();
+        }
 
-  Vector3 ComputeSeparation()
-  {
-    return Vector3.zero;
-  }
+        return null;
+    }
+
+    public void AddNeighbour(GameObject agent)
+    {
+        if (IsLeader() && !mNeighbours.Contains(agent))
+        {
+            PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
+            if (agentBehavior.GetLeader() == null)
+            {
+                agentBehavior.SetLeader(gameObject);
+                mNeighbours.Add(agent);
+            }
+        }
+        // TO-DO: Autogenerate leader of the flocking group
+    }
+
+    public void RemoveNeighbour(GameObject agent)
+    {
+        PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
+        if (IsLeader() && mNeighbours.Contains(agent))
+        {
+            agentBehavior.SetLeader(null);
+            mNeighbours.Remove(agent);
+        }
+        // TO-DO: Autogenerate leader of the flocking group
+    }
+
+    void MoveToMouseClick()
+    {
+        //RigidBody.velocity = Velocity * MovementSpeed;
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                Velocity = hit.point - gameObject.transform.position;
+                Velocity.Normalize();
+            }
+        }
+    }
+
+    void GetNewPath()
+    {
+        Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.PedestriansGraph, transform.position);
+        Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
+        mPath = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
+    }
+
+    //Return whenever there is no more seps
+    bool GetNextLocationStep()
+    {
+        if (mPath.Count > 0)
+        {
+            mNextLocation = mPath[mPath.Count - 1];
+            mPath.RemoveAt(mPath.Count - 1);
+
+            return true;
+        }
+        return false;
+    }
+
+    void UpdatePathfindingMovement()
+    {
+        if (Vector3.Distance(transform.position, mNextLocation) > mMinDistance)
+            transform.position = Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed);
+        else
+        {
+            transform.position = mNextLocation;
+            if (!GetNextLocationStep())
+                GetNewPath();
+        }
+    }
 }
