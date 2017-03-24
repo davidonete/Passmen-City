@@ -11,26 +11,12 @@ public class CityGenerator : MonoBehaviour
 {
     public int Width = 500;
     public float NodeSeparation = 5.0f;
+    private float mBuildingWidth = 0.5f;
     public GameObject Node;
     public List<GameObject> CarNodes;
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
 
-    void Awake()
-    {
-        Random.InitState(System.DateTime.Now.Millisecond);
-
-        // Initialize the nodes
-        InitializeCarNodes();
-        InitializePedestrianNodes();
-
-        // Generate the city
-        AddBuildings();
-
-        // Fill the graphs
-        FillGraph(ref WaypointsExample.CarsGraph, ref CarNodes);
-        FillGraph(ref WaypointsExample.PedestriansGraph, ref PedestrianNodes);
-    }
 
     /// <summary>
     /// Initializes the city. Generates the buildings and the graphs.
@@ -57,9 +43,9 @@ public class CityGenerator : MonoBehaviour
         {
             for (int x = 0; x < Width; x++)
             {
-                Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
+                Vector3 bPos = new Vector3((x + mBuildingWidth) * NodeSeparation,
                                             0.0f,
-                                            (z + 0.5f) * NodeSeparation);
+                                            (z + mBuildingWidth) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity) as GameObject;
                 float h = (Mathf.PerlinNoise(z * 10.5f, x * 10.5f) * 5.0f);
                 float w = Random.Range(1.0f, 1.0f);
@@ -159,9 +145,6 @@ public class CityGenerator : MonoBehaviour
     /// </summary>
     void InitializePedestrianNodes()
     {
-        // To-Do: proper building size
-        Vector3 nodeOff = new Vector3(0.5f, 0.0f, 0.5f) * 1.25f;
-
         // Fill nodes
         for (int z = 0; z < Width; z++)
         {
@@ -225,7 +208,7 @@ public class CityGenerator : MonoBehaviour
 
     void FillPedestrianBottomNodes(int z)
     {
-        Vector3 nodeOff = new Vector3(0.5f, 0.0f, 0.5f) * 1.25f;
+        Vector3 nodeOff = new Vector3(mBuildingWidth, 0.0f, mBuildingWidth) * 1.25f;
 
         for (int x = 0; x < Width; x++)
         {
@@ -257,9 +240,9 @@ public class CityGenerator : MonoBehaviour
 
         for (int x = 0; x < Width; x++)
         {
-            Vector3 bPos = new Vector3((x + 0.5f) * NodeSeparation,
+            Vector3 bPos = new Vector3((x + mBuildingWidth) * NodeSeparation,
                                             0.0f,
-                                            (z + 0.5f) * NodeSeparation);
+                                            (z + mBuildingWidth) * NodeSeparation);
             GameObject n;
 
             // Tl node
