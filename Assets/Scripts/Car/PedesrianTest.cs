@@ -36,17 +36,15 @@ public class PedesrianTest : MonoBehaviour {
   void RayCast()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 0.3f))
+        Debug.DrawRay(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 10.0f);
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 0.2f))
     {
-      Debug.DrawRay(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 10.0f);
       if (hit.collider.gameObject.tag == "CrossWalk")
       {
-        Debug.Log("Hola");
-        hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().SetIsPedestrianWaiting(true);
-      }else
-      {
-        hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().SetIsPedestrianWaiting(false);
+        if(hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetNumberOfPedestriansCrossing() == 0)
+          hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().SetIsPedestrianWaiting(true);
       }
+        
     }
   }
 }
