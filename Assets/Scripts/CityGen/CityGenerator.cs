@@ -17,21 +17,6 @@ public class CityGenerator : MonoBehaviour
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
 
-    void Awake()
-    {
-        Random.InitState(System.DateTime.Now.Millisecond);
-
-        // Initialize the nodes
-        InitializeCarNodes();
-        InitializePedestrianNodes();
-
-        // Generate the city
-        AddBuildings();
-
-        // Fill the graphs
-        FillGraph(ref WaypointsExample.CarsGraph, ref CarNodes);
-        FillGraph(ref WaypointsExample.PedestriansGraph, ref PedestrianNodes);
-    }
 
     /// <summary>
     /// Initializes the city. Generates the buildings and the graphs.
