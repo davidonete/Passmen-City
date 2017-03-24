@@ -32,6 +32,25 @@ public class CityGenerator : MonoBehaviour
         FillGraph(ref WaypointsExample.PedestriansGraph, ref PedestrianNodes);
     }
 
+    /// <summary>
+    /// Initializes the city. Generates the buildings and the graphs.
+    /// </summary>
+    public void InitializeCity()
+    {
+        Random.InitState(System.DateTime.Now.Millisecond);
+
+        // Initialize the nodes
+        InitializeCarNodes();
+        InitializePedestrianNodes();
+
+        // Generate the city
+        AddBuildings();
+
+        // Fill the graphs
+        FillGraph(ref WaypointsExample.CarsGraph, ref CarNodes);
+        FillGraph(ref WaypointsExample.PedestriansGraph, ref PedestrianNodes);
+    }
+
     void AddBuildings()
     {
         for (int z = 0; z < Width; z++)
