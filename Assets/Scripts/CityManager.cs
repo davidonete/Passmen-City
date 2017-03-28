@@ -36,8 +36,8 @@ public class CityManager : MonoBehaviour
     {
       GameObject car = GameObject.Instantiate(Car);
       car.name = "AICar_" + i;
-      car.transform.position = new Vector3(i, 0.0f, 1);
       car.transform.SetParent(cars.transform);
+      car.transform.position = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
     }
   }
 
@@ -51,8 +51,8 @@ public class CityManager : MonoBehaviour
     {
       GameObject pedestrian = GameObject.Instantiate(Pedestrian);
       pedestrian.name = "AIPedestrian_" + i;
-      pedestrian.transform.position = new Vector3(i, 0.0f, 0.0f);
       pedestrian.transform.SetParent(pedestrians.transform);
+      pedestrian.transform.position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
     }
 
     //Create and initialize the crowd controller
