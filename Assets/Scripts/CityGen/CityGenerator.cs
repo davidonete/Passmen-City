@@ -17,6 +17,9 @@ public class CityGenerator : MonoBehaviour
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
 
+    private GameObject mPedestrianRoot;
+    private GameObject mCarRoot;
+    private GameObject mBuildingsRoot;
 
     /// <summary>
     /// Initializes the city. Generates the buildings and the graphs.
@@ -24,6 +27,19 @@ public class CityGenerator : MonoBehaviour
     public void InitializeCity()
     {
         Random.InitState(System.DateTime.Now.Millisecond);
+
+        // Create root nodes
+        mPedestrianRoot = new GameObject();
+        mPedestrianRoot.name = "PedestrianRoot";
+        mPedestrianRoot.transform.position = Vector3.zero;
+
+        mCarRoot = new GameObject();
+        mCarRoot.name = "CarRoot";
+        mCarRoot.transform.position = Vector3.zero;
+
+        mBuildingsRoot = new GameObject();
+        mBuildingsRoot.name = "BuildingsRoot";
+        mBuildingsRoot.transform.position = Vector3.zero;
 
         // Initialize the nodes
         InitializeCarNodes();
@@ -47,6 +63,7 @@ public class CityGenerator : MonoBehaviour
                                             0.0f,
                                             (z + mBuildingWidth) * NodeSeparation);
                 GameObject b = GameObject.Instantiate(BuildingBasic, bPos, Quaternion.identity) as GameObject;
+                b.transform.parent = mBuildingsRoot.transform;
                 float h = (Mathf.PerlinNoise(z * 10.5f, x * 10.5f) * 5.0f);
                 float w = Random.Range(1.0f, 1.0f);
                 //Debug.Log(h + "," + w);
@@ -82,6 +99,7 @@ public class CityGenerator : MonoBehaviour
             for (int z = 0; z < Width; z++)
             {
                 GameObject n = GameObject.Instantiate(Node);
+                n.transform.parent = mCarRoot.transform;
                 n.name = "Node_" + x.ToString() + "_" + z.ToString();
                 n.transform.position = new Vector3(x * NodeSeparation, 0.0f, z * NodeSeparation);
                 n.GetComponent<Node>().DebugColor = Color.red;
@@ -218,6 +236,7 @@ public class CityGenerator : MonoBehaviour
             GameObject n;
             // Bl node
             n = GameObject.Instantiate(Node);
+            n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
@@ -226,6 +245,7 @@ public class CityGenerator : MonoBehaviour
 
             // Br node
             n = GameObject.Instantiate(Node);
+            n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
@@ -247,6 +267,7 @@ public class CityGenerator : MonoBehaviour
 
             // Tl node
             n = GameObject.Instantiate(Node);
+            n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
@@ -255,6 +276,7 @@ public class CityGenerator : MonoBehaviour
 
             // Tr node
             n = GameObject.Instantiate(Node);
+            n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
             n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
