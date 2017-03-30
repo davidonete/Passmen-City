@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 public class PedestrianBehavior : MonoBehaviour
 {
+    private enum PedestrianState
+    {
+        kPedestrianState_Searching,
+        kPedestrianState_Walking,
+        kPedestrianState_Waiting
+    }
+
     bool StartAsLeader = false;
     public float MovementSpeed = 1.0f;
 
@@ -16,7 +23,9 @@ public class PedestrianBehavior : MonoBehaviour
     Vector3 mNextLocation;
     float mMinDistance = 0.04f;
 
+    PedestrianState mState;
     Rigidbody RigidBody;
+
     public Vector3 Velocity;
 
     void Start()
@@ -27,16 +36,13 @@ public class PedestrianBehavior : MonoBehaviour
     // Call this function whenever the game is ready, to start updating the GameObject
     public void Init()
     {
+        mState = PedestrianState.kPedestrianState_Walking;
         mLeader = null;
         mNeighbours = new List<GameObject>();
         RigidBody = gameObject.GetComponent<Rigidbody>();
         Velocity = transform.forward;
 
         ConvertToLeader(StartAsLeader);
-
-        //Start pathfinding (get nearest point and get a random point)
-        GetNewPath();
-        GetNextLocationStep();
 
         //Begin updating the GameObject
         mInitialized = true;
@@ -46,14 +52,77 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (mInitialized)
         {
-            //If the agent is affected by flocking
-            if (GetLeader())
-                RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
-            else
-                UpdatePathfindingMovement();
+            switch (mState)
+            {
+                case PedestrianState.kPedestrianState_Searching:
+                    Searching();
+                    break;
+
+                case PedestrianState.kPedestrianState_Walking:
+                    Walking();
+                    break;
+
+                case PedestrianState.kPedestrianState_Waiting:
+                    Waiting();
+                    break;
+
+                default:
+                    break;
+            }
         }
         if (mIsLeader)
             MoveToMouseClick();
+    }
+
+    void Searching()
+    {
+        //Start pathfinding (get nearest point and get a random point)
+        GetNewPath();
+        if(GetNextLocationStep())
+            mState = PedestrianState.kPedestrianState_Walking;
+    }
+
+    void Walking()
+    {
+        if (CheckCrosswalk())
+            mState = PedestrianState.kPedestrianState_Waiting;
+
+        else
+        {
+            //If the agent is affected by flocking
+            //if (GetLeader())
+            //{
+                transform.forward = Velocity.normalized;
+                RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
+            //}
+            //else
+                //1UpdatePathfindingMovement();
+        }
+    }
+
+    bool CheckCrosswalk()
+    {
+        RaycastHit hit;
+        //Debug.DrawRay(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 10.0f);
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 0.2f))
+        {
+            if (hit.collider.gameObject.tag == "CrossWalk")
+            {
+                CrossWalkBehaviour crosswalk = hit.collider.gameObject.GetComponent<CrossWalkBehaviour>();
+                if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
+                {
+                    crosswalk.SetIsPedestrianWaiting(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void Waiting()
+    {
+        if (!CheckCrosswalk())
+            mState = PedestrianState.kPedestrianState_Walking;
     }
 
     bool IsLeader() { return mIsLeader; }
@@ -150,12 +219,15 @@ public class PedestrianBehavior : MonoBehaviour
     void UpdatePathfindingMovement()
     {
         if (Vector3.Distance(transform.position, mNextLocation) > mMinDistance)
+        {
+            transform.forward = (mNextLocation - transform.position).normalized;
             transform.position = Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed);
+        }
         else
         {
             transform.position = mNextLocation;
             if (!GetNextLocationStep())
-                GetNewPath();
+                mState = PedestrianState.kPedestrianState_Searching;
         }
     }
 }
