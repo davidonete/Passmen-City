@@ -28,7 +28,7 @@ public class CarBehaviour : MonoBehaviour {
   private CarStates State;
   private CarConditions Condition;
 
-  private bool IsInitialized;
+  private bool IsInitialized = false;
 
   private List<Vector3> Path = new List<Vector3>();
   private Vector3 NextLocation;
@@ -39,7 +39,6 @@ public class CarBehaviour : MonoBehaviour {
 
   void Start()
   {
-    IsInitialized = false;
     Init();
   }
 

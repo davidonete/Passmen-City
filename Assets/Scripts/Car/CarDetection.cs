@@ -18,7 +18,7 @@ public class CarDetection : MonoBehaviour {
   void RayCast()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.3f))
+    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1.0f))
     {
       if (hit.collider.gameObject.tag == "Car")
         gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);

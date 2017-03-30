@@ -15,7 +15,7 @@ public class PedestrianBehavior : MonoBehaviour
     public float MovementSpeed = 1.0f;
 
     bool mIsLeader;
-    bool mInitialized;
+    bool mInitialized = false;
     GameObject mLeader;
     List<GameObject> mNeighbours;
 
@@ -30,7 +30,7 @@ public class PedestrianBehavior : MonoBehaviour
 
     void Start()
     {
-        mInitialized = false;
+        
     }
 
     // Call this function whenever the game is ready, to start updating the GameObject
@@ -104,7 +104,7 @@ public class PedestrianBehavior : MonoBehaviour
     {
         RaycastHit hit;
         //Debug.DrawRay(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 10.0f);
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 0.2f))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.0f))
         {
             if (hit.collider.gameObject.tag == "CrossWalk")
             {
