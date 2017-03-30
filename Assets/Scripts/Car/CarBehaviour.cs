@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class CarBehaviour : MonoBehaviour {
@@ -27,11 +28,25 @@ public class CarBehaviour : MonoBehaviour {
   private CarStates State;
   private CarConditions Condition;
 
+  private bool IsInitialized;
+
+  private List<Vector3> Path = new List<Vector3>();
+  private Vector3 NextLocation;
+  public float MinDistance;
+  public float Speed;
+
+  private Rigidbody RB;
 
   void Start()
   {
-        //this.CarStateas
-    State = CarStates.kCarState_Searching;
+    IsInitialized = false;
+    Init();
+  }
+
+  void Init()
+  {
+    //this.CarStateas
+    State = CarStates.kCarState_Driving;
 
     Condition.IsSearching = true;
     Condition.IsDriving = false;
@@ -40,11 +55,16 @@ public class CarBehaviour : MonoBehaviour {
     Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
     Condition.IsOtherCarNear = false;
+
+    RB = GetComponent<Rigidbody>();
+
+    IsInitialized = true;
   }
 
   void Update()
   {
-    StateMachine();
+    if (IsInitialized)
+      StateMachine();
   }
 
   void StateMachine()
@@ -73,12 +93,8 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsSearching)
     {
-      /*
-      if (SearchedPoint)
-      {
-        Condition.IsSearching = false;
-      }
-      */
+      GetNewPath();
+      GetNextLocationStep();
       Condition.IsSearching = false;
     }
     else
@@ -91,7 +107,7 @@ public class CarBehaviour : MonoBehaviour {
   // Driving to the end point
   void Driving()
   {
-    if (Condition.IsDriving)
+    /*if (Condition.IsDriving)
     { 
       if (Condition.IsCrossWalkDetected && Condition.IsGreenLightOn)
       {
@@ -103,21 +119,17 @@ public class CarBehaviour : MonoBehaviour {
       {
         // Test
         if (!Condition.IsOtherCarNear)
-            transform.Translate(Vector3.down * 1.0f * Time.deltaTime);
+          PathfindingMovement();
       }
-
-      /*
-     if (ReachedPoint)
-     {
-       Condition.IsDriving = false;
-     }
-     */
     }
     else
     {
       Condition.IsSearching = true;
       State = CarStates.kCarState_Searching;
-    }
+    }*/
+    RB.MovePosition(transform.position + (transform.forward * Time.deltaTime * Speed));
+
+
   }
 
   // Waiting traffic light
@@ -132,6 +144,42 @@ public class CarBehaviour : MonoBehaviour {
     {
       Condition.IsDriving = true;
       State = CarStates.kCarState_Driving;
+    }
+  }
+
+  ///  PathFinding
+
+  void GetNewPath()
+  {
+    Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
+    Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
+    Path = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
+  }
+
+  bool GetNextLocationStep()
+  {
+    if (Path.Count > 0)
+    {
+      NextLocation = Path[Path.Count - 1];
+      Path.RemoveAt(Path.Count - 1);
+
+      return true;
+    }
+    return false;
+  }
+
+  void PathfindingMovement()
+  {
+    if (Vector3.Distance(transform.position, NextLocation) > MinDistance)
+    {
+      transform.position = Vector3.MoveTowards(transform.position, NextLocation, Time.deltaTime * Speed);
+      transform.forward = (NextLocation - transform.position).normalized;
+    }
+    else
+    {
+      transform.position = NextLocation;
+      if (!GetNextLocationStep())
+        Condition.IsDriving = false;
     }
   }
 
