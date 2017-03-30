@@ -10,7 +10,7 @@ public class CarDetection : MonoBehaviour {
 	}
 
   // Update is called once per frame
-  void Update()
+  void FixedUpdate()
   {
     RayCast();
   }
@@ -18,19 +18,26 @@ public class CarDetection : MonoBehaviour {
   void RayCast()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1.0f))
+    //Debug.DrawLine(transform.position, transform.position + (transform.forward * 2.0f),Color.blue);
+    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f))
     {
       if (hit.collider.gameObject.tag == "Car")
-        gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-
+      {
+        //if(hit.collider.gameObject != gameObject)
+          gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
+      }
+ 
       if (hit.collider.gameObject.tag == "CrossWalk")
       {
-        gameObject.GetComponent<CarBehaviour>().SetIsCrossWalkDetected(true);
+        if (!gameObject.GetComponent<CarBehaviour>().GetCarStates.IsCrossing)
+        {
+          gameObject.GetComponent<CarBehaviour>().SetIsCrossWalkDetected(true);
 
-        if (hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
-          gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
-        else
-          gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);
+          if (hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+            gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
+          else
+            gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);
+        }
       }
     }
     else

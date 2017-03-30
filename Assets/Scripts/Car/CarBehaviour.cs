@@ -21,6 +21,7 @@ public class CarBehaviour : MonoBehaviour {
     public bool IsCrossWalkDetected;
     public bool IsReachedPoint;
     public bool IsOtherCarNear;
+    public bool IsCrossing;
     // Waiting State
     public bool IsWaiting;
   }
@@ -45,10 +46,15 @@ public class CarBehaviour : MonoBehaviour {
   void Init()
   {
     //this.CarStateas
+    /// Change
     State = CarStates.kCarState_Driving;
+    /// 
 
     Condition.IsSearching = true;
-    Condition.IsDriving = false;
+
+    /// Change
+    Condition.IsDriving = true;
+    ////
     Condition.IsGreenLightOn = false;
     Condition.IsCrossWalkDetected = false;
     Condition.IsReachedPoint = false;
@@ -106,7 +112,7 @@ public class CarBehaviour : MonoBehaviour {
   // Driving to the end point
   void Driving()
   {
-    /*if (Condition.IsDriving)
+    if (Condition.IsDriving)
     { 
       if (Condition.IsCrossWalkDetected && Condition.IsGreenLightOn)
       {
@@ -118,17 +124,15 @@ public class CarBehaviour : MonoBehaviour {
       {
         // Test
         if (!Condition.IsOtherCarNear)
-          PathfindingMovement();
+          RB.MovePosition(transform.position + (transform.forward * Time.deltaTime * Speed));
+        //PathfindingMovement();
       }
     }
     else
     {
       Condition.IsSearching = true;
       State = CarStates.kCarState_Searching;
-    }*/
-    RB.MovePosition(transform.position + (transform.forward * Time.deltaTime * Speed));
-
-
+    }
   }
 
   // Waiting traffic light
@@ -143,6 +147,24 @@ public class CarBehaviour : MonoBehaviour {
     {
       Condition.IsDriving = true;
       State = CarStates.kCarState_Driving;
+    }
+  }
+
+  void OnTriggerEnter(Collider other)
+  {
+    if(other.gameObject.tag == "CrossWalk")
+    {
+      if (!Condition.IsGreenLightOn)
+        Condition.IsCrossing = true;
+    }
+  }
+
+  void OnTriggerExit(Collider other)
+  {
+    if (other.gameObject.tag == "CrossWalk")
+    {
+      if (Condition.IsCrossing)
+        Condition.IsCrossing = false;
     }
   }
 
