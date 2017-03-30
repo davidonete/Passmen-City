@@ -90,13 +90,15 @@ public class PedestrianBehavior : MonoBehaviour
         else
         {
             //If the agent is affected by flocking
-            //if (GetLeader())
-            //{
+            if (GetLeader())
+            {
                 transform.forward = Velocity.normalized;
                 RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
-            //}
-            //else
-                //1UpdatePathfindingMovement();
+            
+                //TO DO: Check if the distance has increased since last update
+            }
+            else
+                UpdatePathfindingMovement();
         }
     }
 
@@ -158,16 +160,23 @@ public class PedestrianBehavior : MonoBehaviour
 
     public void AddNeighbour(GameObject agent)
     {
-        if (IsLeader() && !mNeighbours.Contains(agent))
+        PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
+        if (agentBehavior.GetLeader() == null)
         {
-            PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
-            if (agentBehavior.GetLeader() == null)
+            if (IsLeader() && !mNeighbours.Contains(agent))
             {
                 agentBehavior.SetLeader(gameObject);
                 mNeighbours.Add(agent);
             }
+
+            //Autogenerate leader of the flocking group
+            else if (!IsLeader() && GetLeader() == null)
+            {
+                ConvertToLeader(true);
+                agentBehavior.SetLeader(gameObject);
+                mNeighbours.Add(agent);
+            }
         }
-        // TO-DO: Autogenerate leader of the flocking group
     }
 
     public void RemoveNeighbour(GameObject agent)
@@ -177,8 +186,11 @@ public class PedestrianBehavior : MonoBehaviour
         {
             agentBehavior.SetLeader(null);
             mNeighbours.Remove(agent);
+
+            //If the leader has no neighbours
+            if (mNeighbours.Count <= 0)
+                ConvertToLeader(false);
         }
-        // TO-DO: Autogenerate leader of the flocking group
     }
 
     void MoveToMouseClick()
