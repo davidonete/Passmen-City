@@ -94,9 +94,12 @@ public class CityGenerator : MonoBehaviour
     void InitializeCarNodes()
     {
         // Fill with nodes
-        for (int x = 0; x < Width; x++)
+        // We add one to the width so the road goes also
+        // outside of the city on the top/top left borders
+        int carWidth = Width + 1;
+        for (int x = 0; x < carWidth; x++) 
         {
-            for (int z = 0; z < Width; z++)
+            for (int z = 0; z < carWidth; z++) 
             {
                 GameObject n = GameObject.Instantiate(Node);
                 n.transform.parent = mCarRoot.transform;
@@ -108,15 +111,15 @@ public class CityGenerator : MonoBehaviour
         }
 
         // Link the nodes
-        for (int z = 0; z < Width; z++)
+        for (int z = 0; z < carWidth; z++)
         {
-            for (int x = 0; x < Width; x++)
+            for (int x = 0; x < carWidth; x++)
             {
-                int idx = x * Width + z;
+                int idx = x * carWidth + z;
                 // Top link 
-                if (z < Width - 1)
+                if (z < carWidth - 1)
                 {
-                    int curI = x * Width + (z + 1);
+                    int curI = x * carWidth + (z + 1);
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = CarNodes[curI];
                     nn.Distance = Vector3.Distance(CarNodes[idx].transform.position,
@@ -126,7 +129,7 @@ public class CityGenerator : MonoBehaviour
                 // Bottom link
                 if (z > 0)
                 {
-                    int curI = x * Width + (z - 1);
+                    int curI = x * carWidth + (z - 1);
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = CarNodes[curI];
                     nn.Distance = Vector3.Distance(CarNodes[idx].transform.position,
@@ -134,9 +137,9 @@ public class CityGenerator : MonoBehaviour
                     CarNodes[idx].GetComponent<Node>().AddNeighbor(nn);
                 }
                 // Right link
-                if (x < Width - 1)
+                if (x < carWidth - 1)
                 {
-                    int curI = (x + 1) * Width + z;
+                    int curI = (x + 1) * carWidth + z;
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = CarNodes[curI];
                     nn.Distance = Vector3.Distance(CarNodes[idx].transform.position,
@@ -146,7 +149,7 @@ public class CityGenerator : MonoBehaviour
                 // Left link
                 if (x > 0)
                 {
-                    int curI = (x - 1) * Width + z;
+                    int curI = (x - 1) * carWidth + z;
                     NodeNeighbors nn = new NodeNeighbors();
                     nn.OtherNode = CarNodes[curI];
                     nn.Distance = Vector3.Distance(CarNodes[idx].transform.position,
