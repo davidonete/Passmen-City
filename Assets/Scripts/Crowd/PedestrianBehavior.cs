@@ -36,7 +36,7 @@ public class PedestrianBehavior : MonoBehaviour
     // Call this function whenever the game is ready, to start updating the GameObject
     public void Init()
     {
-        mState = PedestrianState.kPedestrianState_Walking;
+        mState = PedestrianState.kPedestrianState_Searching;
         mLeader = null;
         mNeighbours = new List<GameObject>();
         RigidBody = gameObject.GetComponent<Rigidbody>();
@@ -86,7 +86,8 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (CheckCrosswalk())
             mState = PedestrianState.kPedestrianState_Waiting;
-
+        else if(CheckCar())
+            mState = PedestrianState.kPedestrianState_Waiting;
         else
         {
             //If the agent is affected by flocking
@@ -105,7 +106,6 @@ public class PedestrianBehavior : MonoBehaviour
     bool CheckCrosswalk()
     {
         RaycastHit hit;
-        //Debug.DrawRay(transform.position, transform.position + transform.TransformDirection(Vector3.forward) * 10.0f);
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.0f))
         {
             if (hit.collider.gameObject.tag == "CrossWalk")
@@ -121,9 +121,23 @@ public class PedestrianBehavior : MonoBehaviour
         return false;
     }
 
+    bool CheckCar()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.0f))
+        {
+            if (hit.collider.gameObject.tag == "Car")
+                return true;
+        }
+
+        return false;
+    }
+
     void Waiting()
     {
         if (!CheckCrosswalk())
+            mState = PedestrianState.kPedestrianState_Walking;
+        else if (!CheckCar())
             mState = PedestrianState.kPedestrianState_Walking;
     }
 
@@ -169,6 +183,7 @@ public class PedestrianBehavior : MonoBehaviour
                 mNeighbours.Add(agent);
             }
 
+            /*
             //Autogenerate leader of the flocking group
             else if (!IsLeader() && GetLeader() == null)
             {
@@ -176,6 +191,7 @@ public class PedestrianBehavior : MonoBehaviour
                 agentBehavior.SetLeader(gameObject);
                 mNeighbours.Add(agent);
             }
+            */
         }
     }
 
@@ -187,9 +203,11 @@ public class PedestrianBehavior : MonoBehaviour
             agentBehavior.SetLeader(null);
             mNeighbours.Remove(agent);
 
+            /*
             //If the leader has no neighbours
             if (mNeighbours.Count <= 0)
                 ConvertToLeader(false);
+                */
         }
     }
 
