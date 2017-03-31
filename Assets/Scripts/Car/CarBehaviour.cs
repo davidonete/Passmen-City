@@ -169,7 +169,7 @@ public class CarBehaviour : MonoBehaviour {
   {
     Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
     Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
-    Path = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
+    Path = AStarSearch.FindNewObjective(WaypointsExample.CarsGraph, start, end);
   }
 
   bool GetNextLocationStep()
