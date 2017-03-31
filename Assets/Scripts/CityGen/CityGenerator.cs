@@ -22,6 +22,7 @@ public class CityGenerator : MonoBehaviour
     public List<GameObject> CarNodes;
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
+    public GameObject CrossWalk;
 
     private GameObject mPedestrianRoot;
     private GameObject mCarRoot;
@@ -265,11 +266,16 @@ public class CityGenerator : MonoBehaviour
     {
         Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
+        float separationQuart = NodeSeparation * 0.25f;
+
         for (int x = 0; x < Width; x++)
         {
             Vector3 bPos = new Vector3( (x * NodeSeparation) + separationHalf,
                                         0.0f,
                                         (z * NodeSeparation) + separationHalf);
+            Vector3 cwPos = new Vector3((x * NodeSeparation),
+                                        0.0f,
+                                        (z * NodeSeparation) + separationQuart);
 
             GameObject n;
             // Bl node
@@ -279,6 +285,12 @@ public class CityGenerator : MonoBehaviour
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
+            // Add crosswalk
+            GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity)as GameObject;
+            Vector3 cwCurScale = cw.transform.localScale;
+            cwCurScale.x = separationHalf;
+            cwCurScale.z = 5.0f;
+            cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
             // Br node
@@ -296,11 +308,23 @@ public class CityGenerator : MonoBehaviour
     {
         Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
+        float separationQuart = NodeSeparation * 0.25f;
+
         for (int x = 0; x < Width; x++)
         {
             Vector3 bPos = new Vector3((x * NodeSeparation) + separationHalf,
                                         0.0f,
                                         (z * NodeSeparation) + separationHalf);
+            Vector3 cwPos = new Vector3((x * NodeSeparation),
+                                         0.0f,
+                                        (z * NodeSeparation) + separationHalf + separationQuart);
+            Vector3 cwPosTop = new Vector3((x * NodeSeparation) - separationQuart,
+                                            0.0f,
+                                            (z * NodeSeparation) + separationHalf + separationHalf);
+            Vector3 cwPosTop2 = new Vector3((x * NodeSeparation) + separationQuart,
+                                            0.0f,
+                                            (z * NodeSeparation) + separationHalf + separationHalf);
+
             GameObject n;
 
             // Tl node
@@ -310,6 +334,24 @@ public class CityGenerator : MonoBehaviour
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
+            // Add crosswalk
+            GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
+            Vector3 cwCurScale = cw.transform.localScale;
+            cwCurScale.x = separationHalf;
+            cwCurScale.z = 5.0f;
+            cw.transform.localScale = cwCurScale;
+            // Vertical cw
+            cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
+            cwCurScale = cw.transform.localScale;
+            cwCurScale.x = 5.0f;
+            cwCurScale.z = separationHalf;
+            cw.transform.localScale = cwCurScale;
+            // Vertical cw 2
+            cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
+            cwCurScale = cw.transform.localScale;
+            cwCurScale.x = 5.0f;
+            cwCurScale.z = separationHalf;
+            cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
             // Tr node
