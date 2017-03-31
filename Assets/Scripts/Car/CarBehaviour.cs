@@ -36,7 +36,7 @@ public class CarBehaviour : MonoBehaviour {
   public float MinDistance;
   public float Speed;
 
-  private Rigidbody RB;
+  //private Rigidbody RB;
 
   void Start()
   {
@@ -45,23 +45,18 @@ public class CarBehaviour : MonoBehaviour {
 
   void Init()
   {
-    //this.CarStateas
-    /// Change
-    State = CarStates.kCarState_Driving;
-    /// 
+    State = CarStates.kCarState_Searching;
 
     Condition.IsSearching = true;
 
-    /// Change
-    Condition.IsDriving = true;
-    ////
+    Condition.IsDriving = false;
     Condition.IsGreenLightOn = false;
     Condition.IsCrossWalkDetected = false;
     Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
     Condition.IsOtherCarNear = false;
 
-    RB = GetComponent<Rigidbody>();
+    //RB = GetComponent<Rigidbody>();
 
     IsInitialized = true;
   }
@@ -124,8 +119,8 @@ public class CarBehaviour : MonoBehaviour {
       {
         // Test
         if (!Condition.IsOtherCarNear)
-          RB.MovePosition(transform.position + (transform.forward * Time.deltaTime * Speed));
-        //PathfindingMovement();
+          PathfindingMovement();
+          //RB.MovePosition(transform.position + (transform.forward * Time.deltaTime * Speed));
       }
     }
     else
