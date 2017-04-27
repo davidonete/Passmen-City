@@ -101,6 +101,10 @@ public class CityGenerator : MonoBehaviour
                 float w = Random.Range(BuildingWidth, BuildingWidth);
                 //Debug.Log(h + "," + w);
                 b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h, w);
+
+                GameObject baseStreet = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                baseStreet.transform.position = bPos;
+                baseStreet.transform.localScale = new Vector3(20.0f, 0.1f, 20.0f);
             }
         }
     }
@@ -288,7 +292,8 @@ public class CityGenerator : MonoBehaviour
             // Add crosswalk
             GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity)as GameObject;
             Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf;
+            cwCurScale.x = separationHalf * 0.7f;
+            cwCurScale.y = 0.4f;
             cwCurScale.z = 5.0f;
             cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
@@ -337,19 +342,22 @@ public class CityGenerator : MonoBehaviour
             // Add crosswalk
             GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
             Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf;
+            cwCurScale.x = separationHalf * 0.7f;
+            cwCurScale.y = 0.4f;
             cwCurScale.z = 5.0f;
             cw.transform.localScale = cwCurScale;
             // Vertical cw
             cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
             cwCurScale = cw.transform.localScale;
             cwCurScale.x = 5.0f;
+            cwCurScale.y = 0.4f;
             cwCurScale.z = separationHalf;
             cw.transform.localScale = cwCurScale;
             // Vertical cw 2
             cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
             cwCurScale = cw.transform.localScale;
             cwCurScale.x = 5.0f;
+            cwCurScale.y = 0.4f;
             cwCurScale.z = separationHalf;
             cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
