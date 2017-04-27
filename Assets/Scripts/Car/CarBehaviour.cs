@@ -188,8 +188,8 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Vector3.Distance(transform.position, NextLocation) > MinDistance)
     {
-      transform.position = Vector3.MoveTowards(transform.position, NextLocation, Time.deltaTime * Speed);
       transform.forward = (NextLocation - transform.position).normalized;
+      transform.position = Vector3.MoveTowards(transform.position, NextLocation, Time.deltaTime * Speed);
     }
     else
     {
