@@ -52,7 +52,9 @@ public class CityManager : MonoBehaviour
       GameObject pedestrian = GameObject.Instantiate(Pedestrian);
       pedestrian.name = "AIPedestrian_" + i;
       pedestrian.transform.SetParent(pedestrians.transform);
-      pedestrian.transform.position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
+      Vector3 position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
+      position.y = 1.0f;
+      pedestrian.transform.position = position;
     }
 
     //Create and initialize the crowd controller

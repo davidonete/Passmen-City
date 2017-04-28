@@ -239,6 +239,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (mPath.Count > 0)
         {
             mNextLocation = mPath[mPath.Count - 1];
+            mNextLocation.y = 1.0f;
             mPath.RemoveAt(mPath.Count - 1);
 
             return true;
