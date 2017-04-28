@@ -16,13 +16,18 @@ public class CityGenerator : MonoBehaviour
     public float NodeSeparation = 5.0f;
     // The width of the buildings, this value will be clamped checking 
     // the node separation
-    public float BuildingWidth = 10.0f;
+    public float BuildingWidth = 25.0f;
     public float BuildingHeight = 200.0f;
     public GameObject Node;
     public List<GameObject> CarNodes;
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
     public GameObject CrossWalk;
+
+    public float StreetSize = 32.0f;
+    public float CrossWalkHeight = 0.4f;
+    public float CrossWalkWidth = 5.0f;
+    public float CrossWalkLenghtMod = 0.85f;
 
     private GameObject mPedestrianRoot;
     private GameObject mCarRoot;
@@ -104,7 +109,7 @@ public class CityGenerator : MonoBehaviour
 
                 GameObject baseStreet = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 baseStreet.transform.position = bPos;
-                baseStreet.transform.localScale = new Vector3(20.0f, 0.1f, 20.0f);
+                baseStreet.transform.localScale = new Vector3(StreetSize, 0.1f, StreetSize);
             }
         }
     }
@@ -292,9 +297,9 @@ public class CityGenerator : MonoBehaviour
             // Add crosswalk
             GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity)as GameObject;
             Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf * 0.7f;
-            cwCurScale.y = 0.4f;
-            cwCurScale.z = 5.0f;
+            cwCurScale.x = separationHalf * CrossWalkLenghtMod;
+            cwCurScale.y = CrossWalkHeight;
+            cwCurScale.z = CrossWalkWidth;
             cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
@@ -342,23 +347,23 @@ public class CityGenerator : MonoBehaviour
             // Add crosswalk
             GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
             Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf * 0.7f;
-            cwCurScale.y = 0.4f;
-            cwCurScale.z = 5.0f;
+            cwCurScale.x = separationHalf * CrossWalkLenghtMod;
+            cwCurScale.y = CrossWalkHeight;
+            cwCurScale.z = CrossWalkWidth;
             cw.transform.localScale = cwCurScale;
             // Vertical cw
             cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
             cwCurScale = cw.transform.localScale;
-            cwCurScale.x = 5.0f;
-            cwCurScale.y = 0.4f;
-            cwCurScale.z = separationHalf;
+            cwCurScale.x = CrossWalkWidth;
+            cwCurScale.y = CrossWalkHeight;
+            cwCurScale.z = separationHalf * CrossWalkLenghtMod;
             cw.transform.localScale = cwCurScale;
             // Vertical cw 2
             cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
             cwCurScale = cw.transform.localScale;
-            cwCurScale.x = 5.0f;
-            cwCurScale.y = 0.4f;
-            cwCurScale.z = separationHalf;
+            cwCurScale.x = CrossWalkWidth;
+            cwCurScale.y = CrossWalkHeight;
+            cwCurScale.z = separationHalf * CrossWalkLenghtMod;
             cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
