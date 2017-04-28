@@ -43,23 +43,13 @@ public class CityManager : MonoBehaviour
 
   void CreatePedestrians()
   {
-    //Generate the AI pedestrians
-    GameObject pedestrians = new GameObject();
-    pedestrians.name = "Pedestrians";
-
-    for (int i = 0; i < PedestrianAmount; ++i)
-    {
-      GameObject pedestrian = GameObject.Instantiate(Pedestrian);
-      pedestrian.name = "AIPedestrian_" + i;
-      pedestrian.transform.SetParent(pedestrians.transform);
-      Vector3 position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
-      position.y = 1.0f;
-      pedestrian.transform.position = position;
-    }
-
     //Create and initialize the crowd controller
     GameObject crowdController = GameObject.Instantiate(CrowdController);
     crowdController.name = "CrowdController";
+    for (int i = 0; i < PedestrianAmount; ++i)
+    {
+      crowdController.GetComponent<CrowdController>().AddPedestrian();
+    }
     crowdController.GetComponent<CrowdController>().Init();
   }
 }

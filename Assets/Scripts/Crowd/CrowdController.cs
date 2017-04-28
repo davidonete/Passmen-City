@@ -12,9 +12,12 @@ public class CrowdController : MonoBehaviour
     public float CohesionWeight = 1.0f;
     public float AlignmentWeight = 1.0f;
 
-    bool mInitialized;
+    bool mInitialized = false;
     float mCurrentIterationTime;
-    PedestrianBehavior[] mAgents;
+    //PedestrianBehavior[] mAgents;
+    List<PedestrianBehavior> mAgents = new List<PedestrianBehavior>();
+    public GameObject PedestrianPrefab;
+    private GameObject mPedestriansParent;
 
     Vector3 centerOfMas;
 
@@ -24,23 +27,9 @@ public class CrowdController : MonoBehaviour
         Gizmos.DrawSphere(centerOfMas, 1.0f);
     }
 
-    void Start()
-    {
-        mInitialized = false;
-
-        //Temporal initialize (delete this when generating procedural city)
-        Init();
-    }
-
     // Call this function whenever the game is ready, to start updating the GameObject
     public void Init()
     {
-        //Get all agents of the map, save its reference and initialize them
-        mAgents = FindObjectsOfType<PedestrianBehavior>();
-        for (uint i = 0; i < mAgents.Length; i++)
-            mAgents[i].Init();
-
-        //Begin updating the GameObject
         mInitialized = true;
     }
 
@@ -62,7 +51,7 @@ public class CrowdController : MonoBehaviour
 
     void ComputeFlocking()
     {
-        for (int i = 0; i < mAgents.Length; i++)
+        for (int i = 0; i < mAgents.Count; i++)
         {
             if (mAgents[i].GetLeader() != null)
             {
@@ -156,6 +145,29 @@ public class CrowdController : MonoBehaviour
         }
 
         return forceVector;
+    }
+
+    /// <summary>
+    /// Adds a pedestrian to the simulation
+    /// </summary>
+    public void AddPedestrian()
+    {
+        // Yes, it is a hack. Deal with it
+        if(!mPedestriansParent)
+        {
+            mPedestriansParent = new GameObject();
+            mPedestriansParent.name = "Pedestrians";
+        }
+
+        GameObject pedestrian = GameObject.Instantiate(PedestrianPrefab);
+        pedestrian.name = "AIPedestrian_" + mAgents.Count;
+        pedestrian.transform.SetParent(mPedestriansParent.transform);
+        Vector3 position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
+        position.y = 1.0f;
+        pedestrian.transform.position = position;
+
+        // Init the pedestrian behaviour
+        pedestrian.GetComponent<PedestrianBehavior>().Init();
     }
 }
 
