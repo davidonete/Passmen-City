@@ -183,15 +183,14 @@ public class PedestrianBehavior : MonoBehaviour
                 mNeighbours.Add(agent);
             }
 
-            /*
             //Autogenerate leader of the flocking group
             else if (!IsLeader() && GetLeader() == null)
             {
                 ConvertToLeader(true);
+                agentBehavior.ConvertToLeader(false);
                 agentBehavior.SetLeader(gameObject);
                 mNeighbours.Add(agent);
             }
-            */
         }
     }
 
@@ -203,11 +202,9 @@ public class PedestrianBehavior : MonoBehaviour
             agentBehavior.SetLeader(null);
             mNeighbours.Remove(agent);
 
-            /*
             //If the leader has no neighbours
             if (mNeighbours.Count <= 0)
                 ConvertToLeader(false);
-                */
         }
     }
 
