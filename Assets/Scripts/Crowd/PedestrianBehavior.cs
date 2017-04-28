@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PedestrianBehavior : MonoBehaviour
 {
-    private enum PedestrianState
+    public enum PedestrianState
     {
         kPedestrianState_Searching,
         kPedestrianState_Walking,
@@ -70,8 +70,6 @@ public class PedestrianBehavior : MonoBehaviour
                     break;
             }
         }
-        if (mIsLeader)
-            MoveToMouseClick();
     }
 
     void Searching()
@@ -236,7 +234,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (mPath.Count > 0)
         {
             mNextLocation = mPath[mPath.Count - 1];
-            mNextLocation.y = 1.0f;
+            mNextLocation.y = 0.0f;
             mPath.RemoveAt(mPath.Count - 1);
 
             return true;
@@ -257,5 +255,10 @@ public class PedestrianBehavior : MonoBehaviour
             if (!GetNextLocationStep())
                 mState = PedestrianState.kPedestrianState_Searching;
         }
+    }
+
+    public PedestrianState GetPedestrianState
+    {
+        get { return mState; }
     }
 }
