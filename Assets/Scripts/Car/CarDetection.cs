@@ -3,11 +3,14 @@ using System.Collections;
 
 public class CarDetection : MonoBehaviour {
 
+    public LayerMask LayerMask;
+
 	// Use this for initialization
 	void Start ()
   {
 	
 	}
+
 
   // Update is called once per frame
   void FixedUpdate()
@@ -19,12 +22,17 @@ public class CarDetection : MonoBehaviour {
   {
     RaycastHit hit;
     //Debug.DrawLine(transform.position, transform.position + (transform.forward * 2.0f),Color.blue);
-    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f))
+    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask))
     {
       if (hit.collider.gameObject.tag == "Car")
       {
-        //if(hit.collider.gameObject != gameObject)
-          gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
+        Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
+        Vector3 selfTargetDirection = transform.forward;
+        Vector3 hitTargetDirection = hit.transform.forward;
+
+        if (hitTargetDirection == selfTargetDirection)
+           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
+         
       }
  
       if (hit.collider.gameObject.tag == "CrossWalk")
