@@ -3,29 +3,41 @@ using System.Collections;
 
 public class RagdollController : MonoBehaviour
 {
-    public bool DisabledOnStart = true;
     public Transform Spine;
+    private bool mEnabled = true;
 
     void Start()
     {
-        if(DisabledOnStart) SetKinematic(true);
+        DisableRagdoll();
     }
 
-    /// <summary>
-    /// Sets recursively the kinematic state of the parent and 
-    /// childs
-    /// </summary>
-    /// <param name="kinematic"> kinematic state </param>
-    public void SetKinematic(bool kinematic)
+    void EnableRagdoll()
     {
-        SetKinematicImp(Spine, kinematic);
+        if (!mEnabled)
+        {
+            SetKinematicImp(Spine, false);
+            mEnabled = true;
+        }
+    }
+
+    void DisableRagdoll()
+    {
+        if(mEnabled)
+        {
+            SetKinematicImp(Spine, true);
+            mEnabled = false;
+        }
     }
 
     void SetKinematicImp(Transform rb,bool kinematic)
     {
         // Sets the current rb if possible
         var curRb = rb.GetComponent<Rigidbody>();
-        if (curRb) curRb.isKinematic = kinematic;
+        if (curRb)
+        {
+            curRb.isKinematic = kinematic;
+            curRb.detectCollisions = !kinematic;
+        }
 
         // Iterates the childs
         for (var i=0;i<rb.childCount;i++)
