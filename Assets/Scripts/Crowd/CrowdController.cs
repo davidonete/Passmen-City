@@ -163,7 +163,7 @@ public class CrowdController : MonoBehaviour
         pedestrian.name = "AIPedestrian_" + mAgents.Count;
         pedestrian.transform.SetParent(mPedestriansParent.transform);
         Vector3 position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
-        position.y = 1.0f;
+        position.y = 2.0f;
         pedestrian.transform.position = position;
 
         // Init the pedestrian behaviour

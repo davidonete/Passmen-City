@@ -9,6 +9,7 @@ public class PedestrianBehavior : MonoBehaviour
         kPedestrianState_Searching,
         kPedestrianState_Walking,
         kPedestrianState_Waiting
+        //kPedestrianState_Dead
     }
 
     bool StartAsLeader = false;
@@ -27,6 +28,8 @@ public class PedestrianBehavior : MonoBehaviour
     Rigidbody RigidBody;
 
     public Vector3 Velocity;
+
+    private bool mCollided = false;
 
     void Start()
     {
@@ -65,6 +68,9 @@ public class PedestrianBehavior : MonoBehaviour
                 case PedestrianState.kPedestrianState_Waiting:
                     Waiting();
                     break;
+
+                //case PedestrianState.kPedestrianState_Dead:
+                    //break;
 
                 default:
                     break;
@@ -260,5 +266,15 @@ public class PedestrianBehavior : MonoBehaviour
     public PedestrianState GetPedestrianState
     {
         get { return mState; }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == "Car" && !mCollided)
+        {
+            //mCollided = true;
+            //mState = PedestrianState.kPedestrianState_Dead;
+            //GetComponent<RagdollController>().SetKinematic(false);
+        }
     }
 }

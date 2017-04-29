@@ -291,7 +291,7 @@ public class CityGenerator : MonoBehaviour
             n = GameObject.Instantiate(Node);
             n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-            n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
+            n.transform.position = new Vector3(bPos.x - nodeOff.x, 2.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
             // Add crosswalk
@@ -307,7 +307,7 @@ public class CityGenerator : MonoBehaviour
             n = GameObject.Instantiate(Node);
             n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-            n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z - nodeOff.z);
+            n.transform.position = new Vector3(bPos.x + nodeOff.x, 2.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
@@ -341,7 +341,7 @@ public class CityGenerator : MonoBehaviour
             n = GameObject.Instantiate(Node);
             n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-            n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
+            n.transform.position = new Vector3(bPos.x - nodeOff.x, 2.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
             // Add crosswalk
@@ -371,7 +371,7 @@ public class CityGenerator : MonoBehaviour
             n = GameObject.Instantiate(Node);
             n.transform.parent = mPedestrianRoot.transform;
             n.name = "PedestrianNode_" + bPos.x.ToString() + "_" + bPos.z.ToString();
-            n.transform.position = new Vector3(bPos.x + nodeOff.x, 0.0f, bPos.z + nodeOff.z);
+            n.transform.position = new Vector3(bPos.x + nodeOff.x, 2.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
