@@ -8,8 +8,8 @@ public class PedestrianBehavior : MonoBehaviour
     {
         kPedestrianState_Searching,
         kPedestrianState_Walking,
-        kPedestrianState_Waiting
-        //kPedestrianState_Dead
+        kPedestrianState_Waiting,
+        kPedestrianState_Dead
     }
 
     bool StartAsLeader = false;
@@ -69,8 +69,8 @@ public class PedestrianBehavior : MonoBehaviour
                     Waiting();
                     break;
 
-                //case PedestrianState.kPedestrianState_Dead:
-                    //break;
+                case PedestrianState.kPedestrianState_Dead:
+                    break;
 
                 default:
                     break;
@@ -272,9 +272,11 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (col.gameObject.tag == "Car" && !mCollided)
         {
-            //mCollided = true;
-            //mState = PedestrianState.kPedestrianState_Dead;
-            //GetComponent<RagdollController>().SetKinematic(false);
+            Debug.Log("AUUUUUUU");
+            mCollided = true;
+            mState = PedestrianState.kPedestrianState_Dead;
+            GetComponent<RagdollController>().EnableRagdoll();
+            GetComponent<Animator>().enabled = false;
         }
     }
 }

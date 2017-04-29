@@ -11,7 +11,7 @@ public class RagdollController : MonoBehaviour
         DisableRagdoll();
     }
 
-    void EnableRagdoll()
+    public void EnableRagdoll()
     {
         if (!mEnabled)
         {
@@ -20,7 +20,7 @@ public class RagdollController : MonoBehaviour
         }
     }
 
-    void DisableRagdoll()
+    public void DisableRagdoll()
     {
         if(mEnabled)
         {
