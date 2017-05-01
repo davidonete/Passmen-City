@@ -21,12 +21,10 @@ public class CarDetection : MonoBehaviour {
   void RayCast()
   {
     RaycastHit hit;
-    //Debug.DrawLine(transform.position, transform.position + (transform.forward * 2.0f),Color.blue);
     if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask))
     {
       if (hit.collider.gameObject.tag == "Car")
       {
-        Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
         Vector3 selfTargetDirection = transform.forward;
         Vector3 hitTargetDirection = hit.transform.forward;
 

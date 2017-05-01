@@ -122,14 +122,4 @@ public class CrossWalkBehaviour : MonoBehaviour {
     get { return Condition; }
     set { Condition = value; }
   }
-
-    /* private bool mPaco;
-     public bool Paco
-     {
-         get { return mPaco; }
-         set { mPaco = value; }
-     }
-
-     this.Paco = true;
-     bool a = this.Paco;*/
 }
