@@ -31,6 +31,8 @@ public class PedestrianBehavior : MonoBehaviour
 
     private bool mCollided = false;
 
+    private float mReSpawnTimer = 0.0f;
+
     void Start()
     {
         
@@ -70,6 +72,18 @@ public class PedestrianBehavior : MonoBehaviour
                     break;
 
                 case PedestrianState.kPedestrianState_Dead:
+                    mReSpawnTimer += Time.deltaTime;
+                    if(mReSpawnTimer >= 1.5f)
+                    {
+                        var crowd = GameObject.FindObjectOfType<CrowdController>();
+                        if (!crowd)
+                        {
+                            Debug.LogWarning("Could not find a crowd controller");
+                            return;
+                        }
+                        crowd.RemovePedestrian(this);
+                        Destroy(this.gameObject);
+                    }
                     break;
 
                 default:
@@ -272,7 +286,6 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (col.gameObject.tag == "Car" && !mCollided)
         {
-            Debug.Log("AUUUUUUU");
             mCollided = true;
             mState = PedestrianState.kPedestrianState_Dead;
             GetComponent<RagdollController>().EnableRagdoll();

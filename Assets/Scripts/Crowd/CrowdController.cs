@@ -14,7 +14,6 @@ public class CrowdController : MonoBehaviour
 
     bool mInitialized = false;
     float mCurrentIterationTime;
-    //PedestrianBehavior[] mAgents;
     List<PedestrianBehavior> mAgents = new List<PedestrianBehavior>();
     public GameObject PedestrianPrefab;
     private GameObject mPedestriansParent;
@@ -35,6 +34,7 @@ public class CrowdController : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log("Pedestrians:" + mAgents.Count);
         if (mInitialized)
         {
             if (mCurrentIterationTime >= IterationTime)
@@ -168,6 +168,18 @@ public class CrowdController : MonoBehaviour
 
         // Init the pedestrian behaviour
         pedestrian.GetComponent<PedestrianBehavior>().Init();
+
+        mAgents.Add(pedestrian.GetComponent<PedestrianBehavior>());
+    }
+
+    /// <summary>
+    /// Removes the provided pedestrian from the simulation
+    /// </summary>
+    /// <param name="pedestrian"> The pedestrian to be removed </param>
+    public void RemovePedestrian(PedestrianBehavior pedestrian)
+    {
+        mAgents.Remove(pedestrian);
+        AddPedestrian();
     }
 }
 
