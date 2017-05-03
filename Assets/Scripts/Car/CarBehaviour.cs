@@ -24,6 +24,8 @@ public class CarBehaviour : MonoBehaviour {
     public bool IsCrossing;
     // Waiting State
     public bool IsWaiting;
+    public bool IsNearObjective;
+    public float DistanceFromObjective;
   }
  
   private CarStates State;
@@ -55,6 +57,9 @@ public class CarBehaviour : MonoBehaviour {
     Condition.IsReachedPoint = false;
     Condition.IsWaiting = false;
     Condition.IsOtherCarNear = false;
+
+    Condition.IsNearObjective = false;
+    Condition.DistanceFromObjective = 0.0f;
 
     //RB = GetComponent<Rigidbody>();
 
@@ -187,6 +192,14 @@ public class CarBehaviour : MonoBehaviour {
 
   void PathfindingMovement()
   {
+    if (Vector3.Distance(transform.position, NextLocation) > 10)
+    {
+      Condition.DistanceFromObjective = Vector3.Distance(transform.position, NextLocation);
+      Condition.IsNearObjective = false;
+    }
+    else
+      Condition.IsNearObjective = true;
+
     if (Vector3.Distance(transform.position, NextLocation) > MinDistance)
     {
       transform.forward = (NextLocation - transform.position).normalized;
