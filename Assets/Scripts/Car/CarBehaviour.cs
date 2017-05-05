@@ -192,6 +192,8 @@ public class CarBehaviour : MonoBehaviour {
 
   void PathfindingMovement()
   {
+    this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
     if (Vector3.Distance(transform.position, NextLocation) > 10)
     {
       Condition.DistanceFromObjective = Vector3.Distance(transform.position, NextLocation);

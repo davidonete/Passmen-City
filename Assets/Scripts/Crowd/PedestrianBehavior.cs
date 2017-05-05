@@ -53,8 +53,18 @@ public class PedestrianBehavior : MonoBehaviour
         mInitialized = true;
     }
 
+    Vector3 off = new Vector3(0.0f, 1.5f, 0.0f);
     void Update()
     {
+        if(mInitialized && mIsLeader)
+        {
+            Debug.DrawLine(transform.position, transform.position + new Vector3(0.0f, 5.0f, 0.0f),Color.red);
+            foreach(var n in mNeighbours)
+            {
+                Debug.DrawLine(transform.position + off, n.transform.position + off, Color.green);
+            }
+        }
+
         if (mInitialized)
         {
             switch (mState)
@@ -102,6 +112,7 @@ public class PedestrianBehavior : MonoBehaviour
 
     void Walking()
     {
+        //TO DO: Only check when not crowd
         if (CheckCrosswalk())
             mState = PedestrianState.kPedestrianState_Waiting;
         else if(CheckCar())
@@ -179,21 +190,27 @@ public class PedestrianBehavior : MonoBehaviour
     public List<GameObject> GetNeighbours()
     {
         if (IsLeader())
+        {
+            //Debug.Log(mNeighbours);
             return mNeighbours;
+        }
 
         else if (GetLeader() != null)
         {
             PedestrianBehavior leader = GetLeader().GetComponent<PedestrianBehavior>();
+            //Debug.Log(leader.mNeighbours);
             return leader.GetNeighbours();
         }
-
+        //Debug.Log("CACA");
         return null;
     }
 
     public void AddNeighbour(GameObject agent)
     {
         PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
-        if (agentBehavior.GetLeader() == null)
+        if (agentBehavior.mState == PedestrianState.kPedestrianState_Dead) return;
+
+        if (agentBehavior.GetLeader() == null && !agentBehavior.IsLeader())
         {
             if (IsLeader() && !mNeighbours.Contains(agent))
             {
@@ -219,11 +236,22 @@ public class PedestrianBehavior : MonoBehaviour
         {
             agentBehavior.SetLeader(null);
             mNeighbours.Remove(agent);
+            //agentBehavior.RemoveLeadder();
 
             //If the leader has no neighbours
-            if (mNeighbours.Count <= 0)
+            if (mNeighbours.Count <= 1)
                 ConvertToLeader(false);
         }
+        //else if (agentBehavior.IsLeader())
+        //RemoveLeadder();
+    }
+
+    public void RemoveLeadder()
+    {
+        Debug.Log("Remove leader");
+        mLeader = null;
+        mNeighbours.Clear();
+        GetNewPath();
     }
 
     void MoveToMouseClick()
@@ -264,6 +292,8 @@ public class PedestrianBehavior : MonoBehaviour
 
     void UpdatePathfindingMovement()
     {
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
         if (Vector3.Distance(transform.position, mNextLocation) > mMinDistance)
         {
             transform.forward = (mNextLocation - transform.position).normalized;
@@ -286,6 +316,10 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (col.gameObject.tag == "Car" && !mCollided)
         {
+            if(mLeader)
+            {
+                mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
+            }
             mCollided = true;
             mState = PedestrianState.kPedestrianState_Dead;
             GetComponent<RagdollController>().EnableRagdoll();

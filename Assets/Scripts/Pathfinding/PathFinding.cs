@@ -177,19 +177,18 @@ public class AStarSearch
     }
     return nearestNode;
   }
-
-  //TODO: Optimize this function
+    
   public static Vector3 GetRandomWaypoint(Graph graph)
   {
-    int rand = Random.Range(0, graph.NodesCount() + 1);
+    int rand = Random.Range(0, graph.NodesCount() - 1);
     int index = 0;
     foreach (var node in graph.Nodes())
     {
-      index++;
       if (index == rand)
       {
         return node;
       }
+      index++;
     }
     return new Vector3(0, 0, 0);
   }

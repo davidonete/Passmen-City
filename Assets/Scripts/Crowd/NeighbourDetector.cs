@@ -18,7 +18,9 @@ public class NeighbourDetector : MonoBehaviour
     void OnTriggerEnter(Collider Other)
     {
         if (Other.gameObject.layer == 8)
+        {
             mParent.AddNeighbour(Other.gameObject);
+        }
     }
 
     void OnTriggerExit(Collider Other)

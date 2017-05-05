@@ -127,7 +127,9 @@ public class CrowdController : MonoBehaviour
         Vector3 forceVector = Vector3.zero;
         int neighboursCount = 0;
 
+        //Debug.Log("----Start----");
         List<GameObject> neighbours = agent.GetNeighbours();
+        //Debug.Log(neighbours);
         for (int i = 0; i < neighbours.Count; i++)
         {
             // Discard self checking
@@ -137,6 +139,7 @@ public class CrowdController : MonoBehaviour
                 neighboursCount++;
             }
         }
+        //Debug.Log("----End----");
 
         if (neighboursCount > 0)
         {
@@ -163,7 +166,7 @@ public class CrowdController : MonoBehaviour
         pedestrian.name = "AIPedestrian_" + mAgents.Count;
         pedestrian.transform.SetParent(mPedestriansParent.transform);
         Vector3 position = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
-        position.y = 2.0f;
+        position.y = 0.0f;
         pedestrian.transform.position = position;
 
         // Init the pedestrian behaviour
