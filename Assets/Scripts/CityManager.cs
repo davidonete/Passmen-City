@@ -32,7 +32,7 @@ public class CityManager : MonoBehaviour
     GameObject cars = new GameObject();
     cars.name = "Cars";
 
-    for (int i = 0; i < PedestrianAmount; ++i)
+    for (int i = 0; i < CarAmount; ++i)
     {
       GameObject car = GameObject.Instantiate(Car);
       car.name = "AICar_" + i;
