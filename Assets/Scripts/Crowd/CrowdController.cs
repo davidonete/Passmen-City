@@ -127,9 +127,7 @@ public class CrowdController : MonoBehaviour
         Vector3 forceVector = Vector3.zero;
         int neighboursCount = 0;
 
-        //Debug.Log("----Start----");
         List<GameObject> neighbours = agent.GetNeighbours();
-        //Debug.Log(neighbours);
         for (int i = 0; i < neighbours.Count; i++)
         {
             // Discard self checking
@@ -139,7 +137,6 @@ public class CrowdController : MonoBehaviour
                 neighboursCount++;
             }
         }
-        //Debug.Log("----End----");
 
         if (neighboursCount > 0)
         {

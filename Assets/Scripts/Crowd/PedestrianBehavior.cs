@@ -82,23 +82,29 @@ public class PedestrianBehavior : MonoBehaviour
                     break;
 
                 case PedestrianState.kPedestrianState_Dead:
-                    mReSpawnTimer += Time.deltaTime;
-                    if(mReSpawnTimer >= 1.5f)
-                    {
-                        var crowd = GameObject.FindObjectOfType<CrowdController>();
-                        if (!crowd)
-                        {
-                            Debug.LogWarning("Could not find a crowd controller");
-                            return;
-                        }
-                        crowd.RemovePedestrian(this);
-                        Destroy(this.gameObject);
-                    }
+                    Dead();
                     break;
 
                 default:
                     break;
             }
+        }
+    }
+
+    void Dead()
+    {
+        mReSpawnTimer += Time.deltaTime;
+        if (mReSpawnTimer >= 1.5f)
+        {
+            var crowd = GameObject.FindObjectOfType<CrowdController>();
+            if (!crowd)
+            {
+                Debug.LogWarning("Could not find a crowd controller");
+                return;
+            }
+            crowd.RemovePedestrian(this);
+
+            Destroy(this.gameObject);
         }
     }
 
@@ -112,23 +118,22 @@ public class PedestrianBehavior : MonoBehaviour
 
     void Walking()
     {
-        //TO DO: Only check when not crowd
-        if (CheckCrosswalk())
-            mState = PedestrianState.kPedestrianState_Waiting;
-        else if(CheckCar())
-            mState = PedestrianState.kPedestrianState_Waiting;
+        //If the agent is affected by flocking
+        if (GetLeader())
+        {
+            transform.forward = Velocity.normalized;
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
+            
+            //Check if the distance to the final location has increased
+        }
         else
         {
-            //If the agent is affected by flocking
-            if (GetLeader())
-            {
-                transform.forward = Velocity.normalized;
-                RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
-            
-                //TO DO: Check if the distance has increased since last update
-            }
+            if (CheckCrosswalk())
+                mState = PedestrianState.kPedestrianState_Waiting;
+            else if (CheckCar())
+                mState = PedestrianState.kPedestrianState_Waiting;
             else
-                UpdatePathfindingMovement();
+                UpdatePathfindingMovement();    
         }
     }
 
@@ -152,8 +157,10 @@ public class PedestrianBehavior : MonoBehaviour
 
     bool CheckCar()
     {
+        Debug.DrawLine(transform.position + new Vector3(0.0f, 1.0f, 0.0f), transform.position + new Vector3(0.0f, 1.0f, 0.0f) + transform.TransformDirection(Vector3.forward) * 2.0f, Color.red);
+
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.0f))
+        if (Physics.Raycast(transform.position + new Vector3(0.0f, 1.0f, 0.0f), transform.TransformDirection(Vector3.forward), out hit, 2.0f))
         {
             if (hit.collider.gameObject.tag == "Car")
                 return true;
@@ -190,18 +197,14 @@ public class PedestrianBehavior : MonoBehaviour
     public List<GameObject> GetNeighbours()
     {
         if (IsLeader())
-        {
-            //Debug.Log(mNeighbours);
             return mNeighbours;
-        }
 
         else if (GetLeader() != null)
         {
             PedestrianBehavior leader = GetLeader().GetComponent<PedestrianBehavior>();
-            //Debug.Log(leader.mNeighbours);
             return leader.GetNeighbours();
         }
-        //Debug.Log("CACA");
+
         return null;
     }
 
@@ -234,21 +237,24 @@ public class PedestrianBehavior : MonoBehaviour
         PedestrianBehavior agentBehavior = agent.GetComponent<PedestrianBehavior>();
         if (IsLeader() && mNeighbours.Contains(agent))
         {
-            agentBehavior.SetLeader(null);
             mNeighbours.Remove(agent);
-            //agentBehavior.RemoveLeadder();
+            agentBehavior.RemoveLeader();
 
             //If the leader has no neighbours
             if (mNeighbours.Count <= 1)
                 ConvertToLeader(false);
         }
-        //else if (agentBehavior.IsLeader())
-        //RemoveLeadder();
+        else if (mLeader != null)
+        {
+            if(mLeader == agent && agentBehavior.IsLeader())
+                RemoveLeader();
+        }
     }
 
-    public void RemoveLeadder()
+    public void RemoveLeader()
     {
-        Debug.Log("Remove leader");
+        //Debug.Log("Remove Leader!");
+        mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
         mLeader = null;
         mNeighbours.Clear();
         GetNewPath();
