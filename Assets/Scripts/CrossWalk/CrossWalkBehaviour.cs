@@ -85,7 +85,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
       }
       else
       {
-        for (int i = 0; i < TriggerContainer.Count; i++)
+        /*for (int i = 0; i < TriggerContainer.Count; i++)
         {
           if (TriggerContainer[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
           {
@@ -96,7 +96,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
               break;
             }
           }
-        }
+        }*/
       }
     }
     else
