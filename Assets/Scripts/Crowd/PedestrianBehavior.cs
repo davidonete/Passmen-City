@@ -122,7 +122,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (GetLeader())
         {
             transform.forward = Velocity.normalized;
-            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed / 3.0f));
             
             //Check if the distance to the final location has increased
         }
@@ -257,7 +257,17 @@ public class PedestrianBehavior : MonoBehaviour
         mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
         mLeader = null;
         mNeighbours.Clear();
+        mState = PedestrianState.kPedestrianState_Searching;
+        /*
+        Debug.Log("--------- SEARCHING -------" + gameObject.name);
         GetNewPath();
+        if (GetNextLocationStep())
+            mState = PedestrianState.kPedestrianState_Walking;
+
+        foreach (var node in mPath)
+            Debug.Log("Path: " + node);
+        Debug.Log("--------- END SEARCHING -------");
+        */
     }
 
     void MoveToMouseClick()
@@ -278,8 +288,10 @@ public class PedestrianBehavior : MonoBehaviour
     void GetNewPath()
     {
         Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.PedestriansGraph, transform.position);
+        //Debug.Log("Nearest waypoint: " + start + " Position: " + transform.position);
         Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
         mPath = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
+        mPath.Insert(0, start);
     }
 
     //Return whenever there is no more seps
@@ -323,9 +335,8 @@ public class PedestrianBehavior : MonoBehaviour
         if (col.gameObject.tag == "Car" && !mCollided)
         {
             if(mLeader)
-            {
                 mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
-            }
+
             mCollided = true;
             mState = PedestrianState.kPedestrianState_Dead;
             GetComponent<RagdollController>().EnableRagdoll();
