@@ -122,7 +122,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (GetLeader())
         {
             transform.forward = Velocity.normalized;
-            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed / 3.0f));
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
             
             //Check if the distance to the final location has increased
         }
@@ -291,7 +291,7 @@ public class PedestrianBehavior : MonoBehaviour
         //Debug.Log("Nearest waypoint: " + start + " Position: " + transform.position);
         Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
         mPath = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
-        mPath.Insert(0, start);
+        mPath.Add(start);
     }
 
     //Return whenever there is no more seps
