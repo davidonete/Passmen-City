@@ -122,15 +122,13 @@ public class PedestrianBehavior : MonoBehaviour
         if (GetLeader())
         {
             transform.forward = Velocity.normalized;
-            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed));
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed * 1.25f));
             
             //Check if the distance to the final location has increased
         }
         else
         {
-            if (CheckCrosswalk())
-                mState = PedestrianState.kPedestrianState_Waiting;
-            else if (CheckCar())
+            if (CheckCrosswalk() || CheckCar())
                 mState = PedestrianState.kPedestrianState_Waiting;
             else
                 UpdatePathfindingMovement();    
@@ -140,7 +138,7 @@ public class PedestrianBehavior : MonoBehaviour
     bool CheckCrosswalk()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.0f))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.5f))
         {
             if (hit.collider.gameObject.tag == "CrossWalk")
             {
@@ -171,9 +169,7 @@ public class PedestrianBehavior : MonoBehaviour
 
     void Waiting()
     {
-        if (!CheckCrosswalk())
-            mState = PedestrianState.kPedestrianState_Walking;
-        else if (!CheckCar())
+        if (!CheckCrosswalk() && !CheckCar())
             mState = PedestrianState.kPedestrianState_Walking;
     }
 
@@ -256,7 +252,7 @@ public class PedestrianBehavior : MonoBehaviour
         //Debug.Log("Remove Leader!");
         mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
         mLeader = null;
-        mNeighbours.Clear();
+        //mNeighbours.Clear();
         mState = PedestrianState.kPedestrianState_Searching;
         /*
         Debug.Log("--------- SEARCHING -------" + gameObject.name);
