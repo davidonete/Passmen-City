@@ -42,6 +42,14 @@ public class CrossWalkBehaviour : MonoBehaviour {
     StateMachine();
   }
 
+  private void FixedUpdate()
+  {
+    if (State == CrossWalkStates.kCrossWalkStates_RedLight)
+      Debug.DrawRay(transform.position, Vector3.up, Color.red);
+    else if (State == CrossWalkStates.kCrossWalkStates_GreenLight)
+      Debug.DrawRay(transform.position, Vector3.up, Color.green);
+  }
+
   void StateMachine()
   {
     switch (State)
@@ -77,7 +85,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if (Condition.TimeBetweenChanges <= 0.0f)
     {
-      if (Condition.NumberOfPedestriansCrossing == 0)
+      if (Condition.NumberOfPedestriansCrossing <= 0)
       {
         Condition.TimeBetweenChanges = TimeBetweenChanges;
         Condition.IsPedestrianWaiting = false;
@@ -85,22 +93,27 @@ public class CrossWalkBehaviour : MonoBehaviour {
       }
       else
       {
-        /*for (int i = 0; i < TriggerContainer.Count; i++)
-        {
-          if (TriggerContainer[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
-          {
-            if (TriggerContainer.Contains(TriggerContainer[i]))
-            {
-              TriggerContainer.Remove(TriggerContainer[i]);
-              Condition.NumberOfPedestriansCrossing--;
-              break;
-            }
-          }
-        }*/
+        //CheckDeadPedestrians();
       }
     }
     else
       Timer();
+  }
+
+  void CheckDeadPedestrians()
+  {
+    for (int i = TriggerContainer.Count - 1; i >= 0; i--)
+    {
+      if (TriggerContainer.Contains(TriggerContainer[i]))
+      {
+        if (TriggerContainer[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
+        {
+          TriggerContainer.Remove(TriggerContainer[i]);
+          Condition.NumberOfPedestriansCrossing--;
+          break;
+        }
+      }
+    }
   }
 
   void Timer()
