@@ -213,11 +213,13 @@ public class CityGenerator : MonoBehaviour
         PedestrianNodes.Clear();
         for (int z = 0; z < Width; z++)
         {
-            /*
-            for (int x = 0; x < Width; x++){}
-            */
             FillPedestrianBottomNodes(z);
             FillPedestrianTopNodes(z);
+            
+        }
+        for (int z = 0; z < Width; z++)
+        {
+            AddCrossWalks(z);
         }
 
         // Link Nodes
@@ -275,18 +277,14 @@ public class CityGenerator : MonoBehaviour
     {
         Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
-        float separationQuart = NodeSeparation * 0.25f;
 
         for (int x = 0; x < Width; x++)
         {
             Vector3 bPos = new Vector3( (x * NodeSeparation) + separationHalf,
                                         0.0f,
                                         (z * NodeSeparation) + separationHalf);
-            Vector3 cwPos = new Vector3((x * NodeSeparation),
-                                        0.0f,
-                                        (z * NodeSeparation) + separationQuart);
-
             GameObject n;
+
             // Bl node
             n = GameObject.Instantiate(Node);
             n.transform.parent = mPedestrianRoot.transform;
@@ -294,13 +292,6 @@ public class CityGenerator : MonoBehaviour
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z - nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
-            // Add crosswalk
-            GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity)as GameObject;
-            Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf * CrossWalkLenghtMod;
-            cwCurScale.y = CrossWalkHeight;
-            cwCurScale.z = CrossWalkWidth;
-            cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
             // Br node
@@ -318,23 +309,12 @@ public class CityGenerator : MonoBehaviour
     {
         Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
-        float separationQuart = NodeSeparation * 0.25f;
 
         for (int x = 0; x < Width; x++)
         {
             Vector3 bPos = new Vector3((x * NodeSeparation) + separationHalf,
-                                        0.0f,
-                                        (z * NodeSeparation) + separationHalf);
-            Vector3 cwPos = new Vector3((x * NodeSeparation),
-                                         0.0f,
-                                        (z * NodeSeparation) + separationHalf + separationQuart);
-            Vector3 cwPosTop = new Vector3((x * NodeSeparation) - separationQuart,
-                                            0.0f,
-                                            (z * NodeSeparation) + separationHalf + separationHalf);
-            Vector3 cwPosTop2 = new Vector3((x * NodeSeparation) + separationQuart,
-                                            0.0f,
-                                            (z * NodeSeparation) + separationHalf + separationHalf);
-
+                            0.0f,
+                            (z * NodeSeparation) + separationHalf);
             GameObject n;
 
             // Tl node
@@ -344,27 +324,6 @@ public class CityGenerator : MonoBehaviour
             n.transform.position = new Vector3(bPos.x - nodeOff.x, 0.0f, bPos.z + nodeOff.z);
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
-            // Add crosswalk
-            GameObject cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
-            Vector3 cwCurScale = cw.transform.localScale;
-            cwCurScale.x = separationHalf * CrossWalkLenghtMod;
-            cwCurScale.y = CrossWalkHeight;
-            cwCurScale.z = CrossWalkWidth;
-            cw.transform.localScale = cwCurScale;
-            // Vertical cw
-            cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
-            cwCurScale = cw.transform.localScale;
-            cwCurScale.x = CrossWalkWidth;
-            cwCurScale.y = CrossWalkHeight;
-            cwCurScale.z = separationHalf * CrossWalkLenghtMod;
-            cw.transform.localScale = cwCurScale;
-            // Vertical cw 2
-            cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
-            cwCurScale = cw.transform.localScale;
-            cwCurScale.x = CrossWalkWidth;
-            cwCurScale.y = CrossWalkHeight;
-            cwCurScale.z = separationHalf * CrossWalkLenghtMod;
-            cw.transform.localScale = cwCurScale;
             PedestrianNodes.Add(n);
 
             // Tr node
@@ -375,6 +334,75 @@ public class CityGenerator : MonoBehaviour
             n.GetComponent<Node>().DebugColor = Color.blue;
             n.GetComponent<Node>().DebugSize = 0.25f;
             PedestrianNodes.Add(n);
+        }
+    }
+
+    void AddCrossWalks(int z)
+    {
+        Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
+        float separationHalf = NodeSeparation * 0.5f;
+        float separationQuart = NodeSeparation * 0.25f;
+
+        for (int x = 0; x < Width; x++)
+        {
+            Vector3 cwPos  = new Vector3((x * NodeSeparation),
+                                        0.0f,
+                                        (z * NodeSeparation) + separationQuart);
+            Vector3 cwPos2 = new Vector3((x * NodeSeparation),
+                                        0.0f,
+                                        (z * NodeSeparation) + separationHalf + separationQuart);
+
+            int vertX = x;
+
+            Vector3 cwPosTop = new Vector3((vertX * NodeSeparation) + separationQuart + separationHalf,
+                                            0.0f,
+                                            (z * NodeSeparation) + separationHalf + separationHalf);
+            Vector3 cwPosTop2 = new Vector3((vertX * NodeSeparation) + separationQuart,
+                                            0.0f,
+                                            (z * NodeSeparation) + separationHalf + separationHalf);
+            GameObject cw;
+            Vector3 cwCurScale;
+
+            // Horizontal crosswalks
+            if (x != 0)
+            {
+                // Horizontal bottom
+                cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
+                cwCurScale = cw.transform.localScale;
+                cwCurScale.x = separationHalf * CrossWalkLenghtMod;
+                cwCurScale.y = CrossWalkHeight;
+                cwCurScale.z = CrossWalkWidth;
+                cw.transform.localScale = cwCurScale;
+
+                // Horizontal top
+                cw = GameObject.Instantiate(CrossWalk, cwPos2, Quaternion.identity) as GameObject;
+                cwCurScale = cw.transform.localScale;
+                cwCurScale.x = separationHalf * CrossWalkLenghtMod;
+                cwCurScale.y = CrossWalkHeight;
+                cwCurScale.z = CrossWalkWidth;
+                cw.transform.localScale = cwCurScale;
+            }
+
+            // Vertical crosswalk
+            if (z < Width - 1)
+            {
+                // Vertical cw left
+                cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
+                cwCurScale = cw.transform.localScale;
+                cwCurScale.x = CrossWalkWidth;
+                cwCurScale.y = CrossWalkHeight;
+                cwCurScale.z = separationHalf * CrossWalkLenghtMod;
+                cw.transform.localScale = cwCurScale;
+                
+                // Vertical cw right
+                cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
+                cwCurScale = cw.transform.localScale;
+                cwCurScale.x = CrossWalkWidth;
+                cwCurScale.y = CrossWalkHeight;
+                cwCurScale.z = separationHalf * CrossWalkLenghtMod;
+                cw.transform.localScale = cwCurScale;
+                
+            }
         }
     }
 }
