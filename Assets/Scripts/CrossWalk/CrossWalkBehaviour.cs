@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class CrossWalkBehaviour : MonoBehaviour {
+
+  private List<GameObject> TriggerContainer = new List<GameObject>();
 
   public enum CrossWalkStates
   {
@@ -80,6 +83,21 @@ public class CrossWalkBehaviour : MonoBehaviour {
         Condition.IsPedestrianWaiting = false;
         State = CrossWalkStates.kCrossWalkStates_RedLight;
       }
+      else
+      {
+        /*for (int i = 0; i < TriggerContainer.Count; i++)
+        {
+          if (TriggerContainer[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
+          {
+            if (TriggerContainer.Contains(TriggerContainer[i]))
+            {
+              TriggerContainer.Remove(TriggerContainer[i]);
+              Condition.NumberOfPedestriansCrossing--;
+              break;
+            }
+          }
+        }*/
+      }
     }
     else
       Timer();
@@ -93,14 +111,27 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
   void OnTriggerEnter(Collider other)
   {
-     if(other.gameObject.tag == "Pedestrian")
-       Condition.NumberOfPedestriansCrossing++;
+    if(other.gameObject.tag == "Pedestrian")
+    {
+      if (!TriggerContainer.Contains(other.gameObject))
+      {
+        TriggerContainer.Add(other.gameObject);
+        Condition.NumberOfPedestriansCrossing++;
+      }
+    }
+
   }
 
   void OnTriggerExit(Collider other)
   {
     if (other.gameObject.tag == "Pedestrian")
-      Condition.NumberOfPedestriansCrossing--;
+    {
+      if (TriggerContainer.Contains(other.gameObject))
+      {
+        TriggerContainer.Remove(other.gameObject);
+        Condition.NumberOfPedestriansCrossing--;
+      }
+    }
   }
 
 
