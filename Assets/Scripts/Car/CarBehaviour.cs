@@ -21,11 +21,12 @@ public class CarBehaviour : MonoBehaviour {
     public bool IsCrossWalkDetected;
     public bool IsReachedPoint;
     public bool IsOtherCarNear;
-    public bool IsCrossing;
     // Waiting State
     public bool IsWaiting;
     public bool IsNearObjective;
     public float DistanceFromObjective;
+    public Vector3 Position;
+    public GameObject CrossWalk;
   }
  
   private CarStates State;
@@ -60,6 +61,8 @@ public class CarBehaviour : MonoBehaviour {
 
     Condition.IsNearObjective = false;
     Condition.DistanceFromObjective = 0.0f;
+    Condition.Position = Vector3.zero;
+    Condition.CrossWalk = null;
 
     //RB = GetComponent<Rigidbody>();
 
@@ -140,11 +143,14 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (Condition.IsWaiting)
     {
-      if (!Condition.IsGreenLightOn)
+      if (Condition.CrossWalk.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
         Condition.IsWaiting = false;
+      else
+        transform.position = Condition.Position;
     }
     else
     {
+      Condition.IsGreenLightOn = false;
       Condition.IsDriving = true;
       State = CarStates.kCarState_Driving;
     }
@@ -154,8 +160,16 @@ public class CarBehaviour : MonoBehaviour {
   {
     if(other.gameObject.tag == "CrossWalk")
     {
-      if (!Condition.IsGreenLightOn)
-        Condition.IsCrossing = true;
+      Condition.IsCrossWalkDetected = true;
+
+      if (other.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+      {
+        Condition.IsGreenLightOn = true;
+        Condition.CrossWalk = other.gameObject;
+        Condition.Position = transform.position;
+      }
+      else
+        Condition.IsGreenLightOn = false;
     }
   }
 
@@ -163,8 +177,7 @@ public class CarBehaviour : MonoBehaviour {
   {
     if (other.gameObject.tag == "CrossWalk")
     {
-      if (Condition.IsCrossing)
-        Condition.IsCrossing = false;
+      Condition.IsCrossWalkDetected = false;
     }
   }
 

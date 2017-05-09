@@ -93,7 +93,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
       }
       else
       {
-        //CheckDeadPedestrians();
+        //*-CheckDeadPedestrians();
       }
     }
     else

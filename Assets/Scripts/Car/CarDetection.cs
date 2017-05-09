@@ -52,6 +52,7 @@ public class CarDetection : MonoBehaviour {
     RaycastHit hit;
     if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask))
     {
+
       if (hit.collider.gameObject.tag == "Car")
       {
         Vector3 selfTargetDirection = transform.forward;
@@ -76,27 +77,11 @@ public class CarDetection : MonoBehaviour {
             GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
         }
       }*/
-
-      if (hit.collider.gameObject.tag == "CrossWalk")
-      {
-        if (!gameObject.GetComponent<CarBehaviour>().GetCarStates.IsCrossing)
-        {
-          gameObject.GetComponent<CarBehaviour>().SetIsCrossWalkDetected(true);
-
-          if (hit.collider.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
-            gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(true);
-          else
-            gameObject.GetComponent<CarBehaviour>().SetIsGreenLightOn(false);
-        }
-      }
     }
     else
     {
       if(gameObject.GetComponent<CarBehaviour>().GetCarStates.IsOtherCarNear)
         gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(false);
-
-      if (gameObject.GetComponent<CarBehaviour>().GetCarStates.IsCrossWalkDetected)
-        gameObject.GetComponent<CarBehaviour>().SetIsCrossWalkDetected(false);
     }
   }
 }
