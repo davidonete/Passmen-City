@@ -4,8 +4,6 @@ using System.Collections;
 
 public class CrossWalkBehaviour : MonoBehaviour {
 
-  private List<GameObject> TriggerContainer = new List<GameObject>();
-
   public enum CrossWalkStates
   {
     kCrossWalkStates_GreenLight,
@@ -20,7 +18,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
     // RedLight State
     public bool IsPedestrianWaiting;
     // GreenLight State
-    public int NumberOfPedestriansCrossing;
+    public List<GameObject> NumberOfPedestrians;
   }
 
   private CrossWalkStates State;
@@ -34,6 +32,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
     Condition.TimeBetweenChanges = TimeBetweenChanges;
     Condition.IsPedestrianWaiting = false;
+    Condition.NumberOfPedestrians = new List<GameObject>();
   }
 	
 	// Update is called once per frame
@@ -85,16 +84,14 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if (Condition.TimeBetweenChanges <= 0.0f)
     {
-      if (Condition.NumberOfPedestriansCrossing <= 0)
+      if (Condition.NumberOfPedestrians.Count == 0)
       {
         Condition.TimeBetweenChanges = TimeBetweenChanges;
         Condition.IsPedestrianWaiting = false;
         State = CrossWalkStates.kCrossWalkStates_RedLight;
       }
       else
-      {
-        //*-CheckDeadPedestrians();
-      }
+        CheckDeadPedestrians();
     }
     else
       Timer();
@@ -102,16 +99,12 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
   void CheckDeadPedestrians()
   {
-    for (int i = TriggerContainer.Count - 1; i >= 0; i--)
+    for (int i = Condition.NumberOfPedestrians.Count - 1; i >= 0; i--)
     {
-      if (TriggerContainer.Contains(TriggerContainer[i]))
+      if (Condition.NumberOfPedestrians.Contains(Condition.NumberOfPedestrians[i]))
       {
-        if (TriggerContainer[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
-        {
-          TriggerContainer.Remove(TriggerContainer[i]);
-          Condition.NumberOfPedestriansCrossing--;
-          break;
-        }
+        if (Condition.NumberOfPedestrians[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
+          Condition.NumberOfPedestrians.Remove(Condition.NumberOfPedestrians[i]);
       }
     }
   }
@@ -126,11 +119,8 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if(other.gameObject.tag == "Pedestrian")
     {
-      if (!TriggerContainer.Contains(other.gameObject))
-      {
-        TriggerContainer.Add(other.gameObject);
-        Condition.NumberOfPedestriansCrossing++;
-      }
+      if (!Condition.NumberOfPedestrians.Contains(other.gameObject))
+        Condition.NumberOfPedestrians.Add(other.gameObject);
     }
 
   }
@@ -139,11 +129,8 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if (other.gameObject.tag == "Pedestrian")
     {
-      if (TriggerContainer.Contains(other.gameObject))
-      {
-        TriggerContainer.Remove(other.gameObject);
-        Condition.NumberOfPedestriansCrossing--;
-      }
+      if (Condition.NumberOfPedestrians.Contains(other.gameObject))
+        Condition.NumberOfPedestrians.Remove(other.gameObject);
     }
   }
 
