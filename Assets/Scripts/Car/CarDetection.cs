@@ -57,8 +57,8 @@ public class CarDetection : MonoBehaviour {
       {
         Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
 
-        Vector3 selfTargetDirection = transform.forward;
-        Vector3 hitTargetDirection = hit.transform.forward;
+        Vector3 selfTargetDirection = transform.forward.normalized;
+        Vector3 hitTargetDirection = hit.transform.forward.normalized;
 
         if (hitTargetDirection == selfTargetDirection)
         {
