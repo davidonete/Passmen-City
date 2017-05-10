@@ -339,7 +339,6 @@ public class CityGenerator : MonoBehaviour
 
     void AddCrossWalks(int z)
     {
-        Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
         float separationQuart = NodeSeparation * 0.25f;
 
