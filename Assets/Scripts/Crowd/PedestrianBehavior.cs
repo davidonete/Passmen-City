@@ -26,12 +26,15 @@ public class PedestrianBehavior : MonoBehaviour
 
     PedestrianState mState;
     Rigidbody RigidBody;
+    NN.NeuralNetwork mNN;
+    NN.NeuralNetwork mNNController;
 
     public Vector3 Velocity;
 
     private bool mCollided = false;
 
     private float mReSpawnTimer = 0.0f;
+    private float mCheckCrosswalkTimer = 0.0f;
 
     void Start()
     {
@@ -47,26 +50,20 @@ public class PedestrianBehavior : MonoBehaviour
         RigidBody = gameObject.GetComponent<Rigidbody>();
         Velocity = transform.forward;
 
+        mNN = this.GetComponent<NN.NeuralNetwork>();
+        mNNController = GameObject.FindGameObjectWithTag("Neural Network Controller").GetComponent<NN.NeuralNetwork>();
+
         ConvertToLeader(StartAsLeader);
 
         //Begin updating the GameObject
         mInitialized = true;
     }
 
-    Vector3 off = new Vector3(0.0f, 1.5f, 0.0f);
     void Update()
     {
-        if(mInitialized && mIsLeader)
-        {
-            Debug.DrawLine(transform.position, transform.position + new Vector3(0.0f, 5.0f, 0.0f),Color.red);
-            foreach(var n in mNeighbours)
-            {
-                Debug.DrawLine(transform.position + off, n.transform.position + off, Color.green);
-            }
-        }
-
         if (mInitialized)
         {
+            DrawDebugInfo();
             switch (mState)
             {
                 case PedestrianState.kPedestrianState_Searching:
@@ -91,6 +88,16 @@ public class PedestrianBehavior : MonoBehaviour
         }
     }
 
+    void DrawDebugInfo()
+    {
+        if (mIsLeader)
+        {
+            Debug.DrawLine(transform.position, transform.position + new Vector3(0.0f, 5.0f, 0.0f), Color.red);
+            foreach (var n in mNeighbours)
+                Debug.DrawLine(transform.position + new Vector3(0.0f, 1.5f, 0.0f), n.transform.position + new Vector3(0.0f, 1.5f, 0.0f), Color.green);
+        }
+    }
+
     void Dead()
     {
         mReSpawnTimer += Time.deltaTime;
@@ -103,6 +110,8 @@ public class PedestrianBehavior : MonoBehaviour
                 return;
             }
             crowd.RemovePedestrian(this);
+
+            mNNController.TrainNeuralNetwork(mNN.GetInputCache());
 
             Destroy(this.gameObject);
         }
@@ -137,18 +146,24 @@ public class PedestrianBehavior : MonoBehaviour
 
     bool CheckCrosswalk()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1.5f))
+        mCheckCrosswalkTimer += Time.deltaTime;
+        if (mCheckCrosswalkTimer > 0.5f)
         {
-            if (hit.collider.gameObject.tag == "CrossWalk")
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 3.0f))
             {
-                CrossWalkBehaviour crosswalk = hit.collider.gameObject.GetComponent<CrossWalkBehaviour>();
-                if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
+                if (hit.collider.gameObject.tag == "CrossWalk")
                 {
-                    crosswalk.SetIsPedestrianWaiting(true);
-                    return true;
+                    CrossWalkBehaviour crosswalk = hit.collider.gameObject.GetComponent<CrossWalkBehaviour>();
+                    //if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
+                    if (mNN.AskNeuralNetwork(crosswalk.GetCrossWalkStates))
+                    {
+                        crosswalk.SetIsPedestrianWaiting(true);
+                        return true;
+                    }
                 }
             }
+            mCheckCrosswalkTimer = 0.0f;
         }
         return false;
     }
@@ -249,21 +264,10 @@ public class PedestrianBehavior : MonoBehaviour
 
     public void RemoveLeader()
     {
-        //Debug.Log("Remove Leader!");
         mLeader.GetComponent<PedestrianBehavior>().RemoveNeighbour(this.gameObject);
         mLeader = null;
         //mNeighbours.Clear();
         mState = PedestrianState.kPedestrianState_Searching;
-        /*
-        Debug.Log("--------- SEARCHING -------" + gameObject.name);
-        GetNewPath();
-        if (GetNextLocationStep())
-            mState = PedestrianState.kPedestrianState_Walking;
-
-        foreach (var node in mPath)
-            Debug.Log("Path: " + node);
-        Debug.Log("--------- END SEARCHING -------");
-        */
     }
 
     void MoveToMouseClick()
@@ -284,7 +288,6 @@ public class PedestrianBehavior : MonoBehaviour
     void GetNewPath()
     {
         Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.PedestriansGraph, transform.position);
-        //Debug.Log("Nearest waypoint: " + start + " Position: " + transform.position);
         Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.PedestriansGraph);
         mPath = AStarSearch.FindNewObjective(WaypointsExample.PedestriansGraph, start, end);
         mPath.Add(start);
