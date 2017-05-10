@@ -64,7 +64,7 @@ public class CarBehaviour : MonoBehaviour {
     Condition.Position = Vector3.zero;
     Condition.CrossWalk = null;
 
-    //RB = GetComponent<Rigidbody>();
+   // RB = GetComponent<Rigidbody>();
 
     IsInitialized = true;
   }
@@ -188,6 +188,7 @@ public class CarBehaviour : MonoBehaviour {
     Vector3 start = AStarSearch.GetNearestWaypoint(WaypointsExample.CarsGraph, transform.position);
     Vector3 end = AStarSearch.GetRandomWaypoint(WaypointsExample.CarsGraph);
     Path = AStarSearch.FindNewObjective(WaypointsExample.CarsGraph, start, end);
+    Path.Add(start);
   }
 
   bool GetNextLocationStep()

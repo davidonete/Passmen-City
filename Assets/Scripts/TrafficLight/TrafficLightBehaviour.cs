@@ -3,16 +3,17 @@ using System.Collections;
 
 public class TrafficLightBehaviour : MonoBehaviour {
 
-  public Material RedMaterial;
-  public Material GreenMaterial;
-  private Renderer Renderer;
+  //public Material RedMaterial;
+  //public Material GreenMaterial;
+  //private Renderer Renderer;
 
   public CrossWalkBehaviour CrossWalkReference;
+  public Light TrafficLight;
 
   void Start ()
   {
-    Renderer = GetComponent<Renderer>();
-    SelectMaterial();
+    //Renderer = GetComponent<Renderer>();
+    //SelectMaterial();
   }
 
   void Update ()
@@ -23,8 +24,16 @@ public class TrafficLightBehaviour : MonoBehaviour {
   void SelectMaterial()
   {
     if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
-      Renderer.material = GreenMaterial;
+    {
+      if (gameObject.tag == "PedestrianTrafficLight")
+        TrafficLight.color = Color.green;
+      else
+        TrafficLight.color = Color.red;
+    }
     else
-      Renderer.material = RedMaterial;
+      if (gameObject.tag == "PedestrianTrafficLight")
+        TrafficLight.color = Color.red;
+      else
+        TrafficLight.color = Color.green;
   }
 }
