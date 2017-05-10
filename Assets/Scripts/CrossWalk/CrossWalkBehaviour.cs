@@ -91,7 +91,9 @@ public class CrossWalkBehaviour : MonoBehaviour {
         State = CrossWalkStates.kCrossWalkStates_RedLight;
       }
       else
-        CheckDeadPedestrians();
+      {
+        //CheckDeadPedestrians();
+      }
     }
     else
       Timer();
