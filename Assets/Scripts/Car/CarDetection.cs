@@ -55,11 +55,13 @@ public class CarDetection : MonoBehaviour {
 
       if (hit.collider.gameObject.tag == "Car")
       {
+        Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
+
         Vector3 selfTargetDirection = transform.forward;
         Vector3 hitTargetDirection = hit.transform.forward;
 
         if (hitTargetDirection == selfTargetDirection)
-           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);    
+          gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
       }
 
       /*if (hit.collider.gameObject.tag == "Car" && (!hit.collider.GetComponent<CarBehaviour>().GetCarStates.IsNearObjective || !GetComponent<CarBehaviour>().GetCarStates.IsNearObjective))

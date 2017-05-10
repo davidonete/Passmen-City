@@ -92,7 +92,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
       }
       else
       {
-        //CheckDeadPedestrians();
+        CheckDeadPedestrians();
       }
     }
     else
@@ -105,8 +105,11 @@ public class CrossWalkBehaviour : MonoBehaviour {
     {
       if (Condition.NumberOfPedestrians.Contains(Condition.NumberOfPedestrians[i]))
       {
-        if (Condition.NumberOfPedestrians[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
-          Condition.NumberOfPedestrians.Remove(Condition.NumberOfPedestrians[i]);
+        if (Condition.NumberOfPedestrians[i] != null)
+        {
+          if(Condition.NumberOfPedestrians[i].gameObject.GetComponent<PedestrianBehavior>().GetPedestrianState == PedestrianBehavior.PedestrianState.kPedestrianState_Dead)
+            Condition.NumberOfPedestrians.Remove(Condition.NumberOfPedestrians[i]);
+        }
       }
     }
   }
