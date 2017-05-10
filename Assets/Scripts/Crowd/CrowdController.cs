@@ -17,6 +17,7 @@ public class CrowdController : MonoBehaviour
     List<PedestrianBehavior> mAgents = new List<PedestrianBehavior>();
     public GameObject PedestrianPrefab;
     private GameObject mPedestriansParent;
+    NN.NeuralNetwork mNNController = null;
 
     Vector3 centerOfMas;
 
@@ -168,7 +169,15 @@ public class CrowdController : MonoBehaviour
 
         // Init the pedestrian behaviour
         pedestrian.GetComponent<PedestrianBehavior>().Init();
+        pedestrian.GetComponent<NN.NeuralNetwork>().Init();
 
+        if(mNNController == null)
+        {
+            mNNController = GameObject.FindGameObjectWithTag("Neural Network Controller").GetComponent<NN.NeuralNetwork>();
+            mNNController.Init();
+        }
+        
+        pedestrian.GetComponent<NN.NeuralNetwork>().SetConnectionWeights(mNNController.GetConnectionWeights());
         mAgents.Add(pedestrian.GetComponent<PedestrianBehavior>());
     }
 
