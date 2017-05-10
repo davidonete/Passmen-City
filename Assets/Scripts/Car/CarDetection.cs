@@ -62,8 +62,8 @@ public class CarDetection : MonoBehaviour {
 
         if (hitTargetDirection == selfTargetDirection)
         {
-          Debug.Log(selfTargetDirection);
-          Debug.Log(hitTargetDirection);
+          //Debug.Log(selfTargetDirection);
+          //Debug.Log(hitTargetDirection);
           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
         }
       }
