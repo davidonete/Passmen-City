@@ -18,10 +18,11 @@ public class TrafficLightBehaviour : MonoBehaviour {
 
   void Update ()
   {
-    SelectMaterial();
+    SelectLight();
+    //SelectMaterial();
   }
 
-  void SelectMaterial()
+  void SelectLight()
   {
     if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
     {
@@ -36,4 +37,23 @@ public class TrafficLightBehaviour : MonoBehaviour {
       else
         TrafficLight.color = Color.green;
   }
+
+  /*void SelectMaterial()
+  {
+    if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+    {
+      if (gameObject.tag == "PedestrianTrafficLight")
+        Renderer.material = GreenMaterial;
+      else
+        Renderer.material = RedMaterial;
+    }
+    else
+    {
+      if (gameObject.tag == "PedestrianTrafficLight")
+        Renderer.material = RedMaterial;
+      else
+        Renderer.material = GreenMaterial;
+    }
+  }*/
+
 }
