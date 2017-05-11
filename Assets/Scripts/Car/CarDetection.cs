@@ -5,8 +5,8 @@ public class CarDetection : MonoBehaviour {
 
   public LayerMask LayerMask;
 
-	// Use this for initialization
-	void Start ()
+  // Use this for initialization
+  void Start ()
   {
 	
 	}
@@ -50,20 +50,17 @@ public class CarDetection : MonoBehaviour {
   void RayCast()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask))
+    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask) && hit.collider != this)
     {
-
       if (hit.collider.gameObject.tag == "Car")
       {
-        Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
 
-        Vector3 selfTargetDirection = transform.forward.normalized;
-        Vector3 hitTargetDirection = hit.transform.forward.normalized;
+        Vector3 selfTargetDirection = gameObject.transform.forward.normalized;
+        Vector3 hitTargetDirection = hit.collider.gameObject.transform.forward.normalized;
 
         if (hitTargetDirection == selfTargetDirection)
         {
-          //Debug.Log(selfTargetDirection);
-          //Debug.Log(hitTargetDirection);
+          Debug.DrawLine(hit.transform.position, transform.position, Color.blue, 2.0f);
           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
         }
       }
