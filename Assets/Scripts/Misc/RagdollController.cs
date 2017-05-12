@@ -38,6 +38,21 @@ public class RagdollController : MonoBehaviour
             curRb.isKinematic = kinematic;
             curRb.detectCollisions = !kinematic;
         }
+        // Disable colliders
+        var curBoxCol = rb.GetComponent<BoxCollider>();
+        if(curBoxCol)
+        {
+            curBoxCol.enabled = !kinematic;
+        }
+        else
+        {
+            var curCapsuleCol = rb.GetComponent<CapsuleCollider>();
+            if(curCapsuleCol)
+            {
+                curCapsuleCol.enabled = !kinematic;
+            }
+        }
+        
 
         // Iterates the childs
         for (var i=0;i<rb.childCount;i++)
