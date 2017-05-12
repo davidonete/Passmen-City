@@ -102,20 +102,27 @@ public class PriorityQueue<Vector3>
 
 public class AStarSearch
 {
-	public Dictionary<Vector3, Vector3> cameFrom = new Dictionary<Vector3, Vector3>();
-	public Dictionary<Vector3, double> costSoFar = new Dictionary<Vector3, double>();
+	public static Dictionary<Vector3, Vector3> cameFrom = new Dictionary<Vector3, Vector3>();
 
-	static public double Heuristic(Vector3 a, Vector3 b)
+  public static Dictionary<Vector3, double> costSoFar = new Dictionary<Vector3, double>();
+
+	public static double Heuristic(Vector3 a, Vector3 b)
 	{
 		return System.Math.Abs(a.x - b.x) + System.Math.Abs(a.y - b.y);
 	}
 
-	public AStarSearch(Graph graph, Vector3 start, Vector3 goal)
-	{
+  public AStarSearch() { }
+
+  public static void Start(Graph graph, Vector3 start, Vector3 goal)
+  {
 		PriorityQueue<Vector3> frontier = new PriorityQueue<Vector3>();
+
 		frontier.Enqueue(start, 0);
 
-		cameFrom[start] = start;
+    cameFrom.Clear();
+    costSoFar.Clear();
+
+    cameFrom[start] = start;
 		costSoFar[start] = 0;
 
 		while (frontier.Count > 0)
@@ -142,20 +149,19 @@ public class AStarSearch
 	}
 
 	public static List<Vector3> FindNewObjective(Graph graph, Vector3 start, Vector3 end)
-	{
-		List<Vector3> path = new List<Vector3>();
+  {
+    List<Vector3> path = new List<Vector3>();
 		if (graph.NodesCount() > 0)
 		{
-			AStarSearch AStar = new AStarSearch(graph, start, end);
-
+      Start(graph, start, end);
 			//Debug.Log("Start: " + start + " | End: " + end);
 			Vector3 nextStep = end;
 
 			while (Vector3.Distance(start, nextStep) > 0.1f)
 			{
-				path.Add(nextStep);
 				//Debug.Log("Next " + nextStep);
-				nextStep = AStar.cameFrom[nextStep];
+				path.Add(nextStep);
+				nextStep = cameFrom[nextStep];
 			}
 			//Debug.Log("**********************");
 		}
