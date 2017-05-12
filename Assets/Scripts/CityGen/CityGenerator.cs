@@ -276,7 +276,8 @@ public class CityGenerator : MonoBehaviour
 
     void FillPedestrianBottomNodes(int z)
     {
-        Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
+        //Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
+        Vector3 nodeOff = new Vector3(10.0f, 0.0f, 10.0f) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
 
         for (int x = 0; x < Width; x++)
@@ -308,7 +309,8 @@ public class CityGenerator : MonoBehaviour
 
     void FillPedestrianTopNodes(int z)
     {
-        Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
+        //Vector3 nodeOff = new Vector3(BuildingWidth, 0.0f, BuildingWidth) * 1.25f;
+        Vector3 nodeOff = new Vector3(10.0f, 0.0f, 10.0f) * 1.25f;
         float separationHalf = NodeSeparation * 0.5f;
 
         for (int x = 0; x < Width; x++)

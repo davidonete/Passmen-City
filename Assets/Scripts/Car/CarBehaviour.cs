@@ -196,7 +196,7 @@ public class CarBehaviour : MonoBehaviour {
     if (Path.Count > 0)
     {
       NextLocation = Path[Path.Count - 1];
-      NextLocation.y = 0.2f;
+      NextLocation.y = 0.0f;
       Path.RemoveAt(Path.Count - 1);
 
       return true;

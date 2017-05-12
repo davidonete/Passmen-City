@@ -155,8 +155,8 @@ public class PedestrianBehavior : MonoBehaviour
                 if (hit.collider.gameObject.tag == "CrossWalk")
                 {
                     CrossWalkBehaviour crosswalk = hit.collider.gameObject.GetComponent<CrossWalkBehaviour>();
-                    if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
-                    //if (mNN.AskNeuralNetwork(crosswalk.GetCrossWalkStates))
+                    //if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
+                    if (mNN.AskNeuralNetwork(crosswalk.GetCrossWalkStates))
                     {
                         crosswalk.SetIsPedestrianWaiting(true);
                         return true;
