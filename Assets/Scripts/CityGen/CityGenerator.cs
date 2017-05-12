@@ -44,7 +44,7 @@ public class CityGenerator : MonoBehaviour
         // Clamp building width
         if(BuildingWidth >= NodeSeparation)
         {
-            Debug.LogWarning("The provided building width is too big, clamping it down.");
+            ////Debug..LogWarning("The provided building width is too big, clamping it down.");
             BuildingWidth = NodeSeparation / 1.5f;
         }
     }
@@ -54,12 +54,12 @@ public class CityGenerator : MonoBehaviour
     /// </summary>
     public void InitializeCity()
     {
-        Debug.Log("Initializing city...");
+        ////Debug..Log("Initializing city...");
 
         // Initialzed check
         if(mInitialized)
         {
-            Debug.LogWarning("You are trying to initialize the city while it is already generated nub.");
+            ////Debug..LogWarning("You are trying to initialize the city while it is already generated nub.");
             return;
         }
         mInitialized = true;
@@ -105,7 +105,7 @@ public class CityGenerator : MonoBehaviour
                 b.transform.parent = mBuildingsRoot.transform;
                 float h = (Mathf.PerlinNoise(z * 10.5f, x * 10.5f) * BuildingHeight);
                 float w = Random.Range(BuildingWidth, BuildingWidth);
-                //Debug.Log(h + "," + w);
+                //////Debug..Log(h + "," + w);
                 b.GetComponent<MeshFilter>().mesh = GeometryGen.Instance.GenBuilding(h, w);
 
                 GameObject baseStreet = GameObject.CreatePrimitive(PrimitiveType.Cube);

@@ -324,7 +324,7 @@ namespace NN
             GetResults(outputs);
             BackPropagate(GetTargetOutputs(inputs));
 
-            //Debug.Log("NN input: " + inputs[0] + " output: " + outputs[0]);
+            //////Debug..Log("NN input: " + inputs[0] + " output: " + outputs[0]);
             if (outputs[0] > 0.5)
                 return true;
 

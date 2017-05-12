@@ -58,7 +58,7 @@ namespace UnityStandardAssets.ImageEffects
 
             if ( shaderRGB == null || shaderYUV == null )
             {
-                Debug.Log( "Noise shaders are not set up! Disabling noise effect." );
+                //Debug.Log( "Noise shaders are not set up! Disabling noise effect." );
                 enabled = false;
             }
             else

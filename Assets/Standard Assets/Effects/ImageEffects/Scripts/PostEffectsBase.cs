@@ -18,7 +18,7 @@ namespace UnityStandardAssets.ImageEffects
 		{
             if (!s)
 			{
-                Debug.Log("Missing shader in " + ToString ());
+                //Debug.Log("Missing shader in " + ToString ());
                 enabled = false;
                 return null;
             }
@@ -29,7 +29,7 @@ namespace UnityStandardAssets.ImageEffects
             if (!s.isSupported)
 			{
                 NotSupported ();
-                Debug.Log("The shader " + s.ToString() + " on effect "+ToString()+" is not supported on this platform!");
+                //Debug.Log("The shader " + s.ToString() + " on effect "+ToString()+" is not supported on this platform!");
                 return null;
             }
 
@@ -45,7 +45,7 @@ namespace UnityStandardAssets.ImageEffects
 		{
             if (!s)
 			{
-                Debug.Log ("Missing shader in " + ToString ());
+                //Debug.Log ("Missing shader in " + ToString ());
                 return null;
             }
 
@@ -96,7 +96,7 @@ namespace UnityStandardAssets.ImageEffects
 
         public virtual bool CheckResources ()
 		{
-            Debug.LogWarning ("CheckResources () for " + ToString() + " should be overwritten.");
+            //Debug.LogWarning ("CheckResources () for " + ToString() + " should be overwritten.");
             return isSupported;
         }
 
@@ -153,13 +153,13 @@ namespace UnityStandardAssets.ImageEffects
 
         protected void ReportAutoDisable ()
 		{
-            Debug.LogWarning ("The image effect " + ToString() + " has been disabled as it's not supported on the current platform.");
+            //Debug.LogWarning ("The image effect " + ToString() + " has been disabled as it's not supported on the current platform.");
         }
 
         // deprecated but needed for old effects to survive upgrading
         bool CheckShader (Shader s)
 		{
-            Debug.Log("The shader " + s.ToString () + " on effect "+ ToString () + " is not part of the Unity 3.2+ effects suite anymore. For best performance and quality, please ensure you are using the latest Standard Assets Image Effects (Pro only) package.");
+            //Debug.Log("The shader " + s.ToString () + " on effect "+ ToString () + " is not part of the Unity 3.2+ effects suite anymore. For best performance and quality, please ensure you are using the latest Standard Assets Image Effects (Pro only) package.");
             if (!s.isSupported)
 			{
                 NotSupported ();

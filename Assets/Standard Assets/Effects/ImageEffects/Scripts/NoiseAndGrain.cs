@@ -70,7 +70,7 @@ namespace UnityStandardAssets.ImageEffects
                 Graphics.Blit(source, destination);
                 if (null == noiseTexture)
                 {
-                    Debug.LogWarning("Noise & Grain effect failing as noise texture is not assigned. please assign.", transform);
+                    //Debug.LogWarning("Noise & Grain effect failing as noise texture is not assigned. please assign.", transform);
                 }
                 return;
             }

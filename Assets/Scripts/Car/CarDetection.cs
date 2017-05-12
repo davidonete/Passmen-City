@@ -27,7 +27,7 @@ public class CarDetection : MonoBehaviour {
 
       if (hitTargetDirection == selfTargetDirection)
       {
-        Debug.Log("Hola");
+        //Debug.Log("Hola");
         if (GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective >= other.GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective)
           GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
         else
@@ -60,7 +60,7 @@ public class CarDetection : MonoBehaviour {
 
         if (hitTargetDirection == selfTargetDirection)
         {
-          Debug.DrawLine(hit.transform.position, transform.position, Color.blue, 2.0f);
+          //Debug.DrawLine(hit.transform.position, transform.position, Color.blue, 2.0f);
           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
         }
       }
@@ -72,7 +72,7 @@ public class CarDetection : MonoBehaviour {
 
         if (hitTargetDirection == selfTargetDirection)
         {
-          Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
+          //Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
 
           if (hit.collider.GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective >= GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective)
             hit.collider.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);

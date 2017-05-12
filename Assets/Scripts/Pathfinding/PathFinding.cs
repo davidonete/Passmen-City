@@ -154,16 +154,16 @@ public class AStarSearch
 		if (graph.NodesCount() > 0)
 		{
       Start(graph, start, end);
-			//Debug.Log("Start: " + start + " | End: " + end);
+			////Debug.Log("Start: " + start + " | End: " + end);
 			Vector3 nextStep = end;
 
 			while (Vector3.Distance(start, nextStep) > 0.1f)
 			{
-				//Debug.Log("Next " + nextStep);
+				////Debug.Log("Next " + nextStep);
 				path.Add(nextStep);
 				nextStep = cameFrom[nextStep];
 			}
-			//Debug.Log("**********************");
+			////Debug.Log("**********************");
 		}
 		return path;
 	}

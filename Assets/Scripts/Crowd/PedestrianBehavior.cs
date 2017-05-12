@@ -63,7 +63,7 @@ public class PedestrianBehavior : MonoBehaviour
     {
         if (mInitialized)
         {
-            DrawDebugInfo();
+            //DrawDebugInfo();
             switch (mState)
             {
                 case PedestrianState.kPedestrianState_Searching:
@@ -106,7 +106,7 @@ public class PedestrianBehavior : MonoBehaviour
             var crowd = GameObject.FindObjectOfType<CrowdController>();
             if (!crowd)
             {
-                Debug.LogWarning("Could not find a crowd controller");
+                //Debug.LogWarning("Could not find a crowd controller");
                 return;
             }
             crowd.RemovePedestrian(this);
@@ -155,8 +155,8 @@ public class PedestrianBehavior : MonoBehaviour
                 if (hit.collider.gameObject.tag == "CrossWalk")
                 {
                     CrossWalkBehaviour crosswalk = hit.collider.gameObject.GetComponent<CrossWalkBehaviour>();
-                    //if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
-                    if (mNN.AskNeuralNetwork(crosswalk.GetCrossWalkStates))
+                    if (crosswalk.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_RedLight)
+                    //if (mNN.AskNeuralNetwork(crosswalk.GetCrossWalkStates))
                     {
                         crosswalk.SetIsPedestrianWaiting(true);
                         return true;
@@ -170,7 +170,7 @@ public class PedestrianBehavior : MonoBehaviour
 
     bool CheckCar()
     {
-        Debug.DrawLine(transform.position + new Vector3(0.0f, 1.0f, 0.0f), transform.position + new Vector3(0.0f, 1.0f, 0.0f) + transform.TransformDirection(Vector3.forward) * 2.0f, Color.red);
+        //Debug.DrawLine(transform.position + new Vector3(0.0f, 1.0f, 0.0f), transform.position + new Vector3(0.0f, 1.0f, 0.0f) + transform.TransformDirection(Vector3.forward) * 2.0f, Color.red);
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position + new Vector3(0.0f, 1.0f, 0.0f), transform.TransformDirection(Vector3.forward), out hit, 2.0f))

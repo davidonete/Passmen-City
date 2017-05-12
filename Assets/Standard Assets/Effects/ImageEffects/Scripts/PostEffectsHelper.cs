@@ -9,7 +9,7 @@ namespace UnityStandardAssets.ImageEffects
     {
         void OnRenderImage (RenderTexture source, RenderTexture destination)
         {
-            Debug.Log("OnRenderImage in Helper called ...");
+            //Debug.Log("OnRenderImage in Helper called ...");
         }
 
         static void DrawLowLevelPlaneAlignedWithCamera (

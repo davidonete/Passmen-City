@@ -44,10 +44,10 @@ public class CrossWalkBehaviour : MonoBehaviour {
 
   private void FixedUpdate()
   {
-    if (State == CrossWalkStates.kCrossWalkStates_RedLight)
-      Debug.DrawRay(transform.position, Vector3.up, Color.red);
-    else if (State == CrossWalkStates.kCrossWalkStates_GreenLight)
-      Debug.DrawRay(transform.position, Vector3.up, Color.green);
+    //if (State == CrossWalkStates.kCrossWalkStates_RedLight)
+      //Debug.DrawRay(transform.position, Vector3.up, Color.red);
+    //else if (State == CrossWalkStates.kCrossWalkStates_GreenLight)
+      //Debug.DrawRay(transform.position, Vector3.up, Color.green);
   }
 
   void StateMachine()

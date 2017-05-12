@@ -35,7 +35,7 @@ public class CrowdController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("Pedestrians:" + mAgents.Count);
+        ////Debug.Log("Pedestrians:" + mAgents.Count);
         if (mInitialized)
         {
             if (mCurrentIterationTime >= IterationTime)
