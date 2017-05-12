@@ -34,11 +34,12 @@ public class CrossWalkBehaviour : MonoBehaviour {
     Condition.IsPedestrianWaiting = false;
     Condition.NumberOfPedestrians = new List<GameObject>();
   }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+  void Update ()
   {
     StateMachine();
+    CheckDeadPedestrians();
   }
 
   private void FixedUpdate()
@@ -89,10 +90,6 @@ public class CrossWalkBehaviour : MonoBehaviour {
         Condition.TimeBetweenChanges = TimeBetweenChanges;
         Condition.IsPedestrianWaiting = false;
         State = CrossWalkStates.kCrossWalkStates_RedLight;
-      }
-      else
-      {
-        CheckDeadPedestrians();
       }
     }
     else
