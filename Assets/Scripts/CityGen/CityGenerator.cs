@@ -22,7 +22,8 @@ public class CityGenerator : MonoBehaviour
     public List<GameObject> CarNodes;
     public List<GameObject> PedestrianNodes;
     public GameObject BuildingBasic;
-    public GameObject CrossWalk;
+    public GameObject CrossWalkHorizontal;
+    public GameObject CrossWalkVertical;
 
     public float StreetSize = 32.0f;
     public float CrossWalkHeight = 0.4f;
@@ -366,7 +367,7 @@ public class CityGenerator : MonoBehaviour
             if (x != 0)
             {
                 // Horizontal bottom
-                cw = GameObject.Instantiate(CrossWalk, cwPos, Quaternion.identity) as GameObject;
+                cw = GameObject.Instantiate(CrossWalkHorizontal, cwPos, Quaternion.identity) as GameObject;
                 cwCurScale = cw.transform.localScale;
                 cwCurScale.x = separationHalf * CrossWalkLenghtMod;
                 cwCurScale.y = CrossWalkHeight;
@@ -374,7 +375,7 @@ public class CityGenerator : MonoBehaviour
                 cw.transform.localScale = cwCurScale;
 
                 // Horizontal top
-                cw = GameObject.Instantiate(CrossWalk, cwPos2, Quaternion.identity) as GameObject;
+                cw = GameObject.Instantiate(CrossWalkHorizontal, cwPos2, Quaternion.identity) as GameObject;
                 cwCurScale = cw.transform.localScale;
                 cwCurScale.x = separationHalf * CrossWalkLenghtMod;
                 cwCurScale.y = CrossWalkHeight;
@@ -382,11 +383,11 @@ public class CityGenerator : MonoBehaviour
                 cw.transform.localScale = cwCurScale;
             }
 
-            // Vertical crosswalk
+            // Vertical Crosswalk
             if (z < Width - 1)
             {
                 // Vertical cw left
-                cw = GameObject.Instantiate(CrossWalk, cwPosTop2, Quaternion.identity) as GameObject;
+                cw = GameObject.Instantiate(CrossWalkVertical, cwPosTop2, Quaternion.identity) as GameObject;
                 cwCurScale = cw.transform.localScale;
                 cwCurScale.x = CrossWalkWidth;
                 cwCurScale.y = CrossWalkHeight;
@@ -394,7 +395,7 @@ public class CityGenerator : MonoBehaviour
                 cw.transform.localScale = cwCurScale;
                 
                 // Vertical cw right
-                cw = GameObject.Instantiate(CrossWalk, cwPosTop, Quaternion.identity) as GameObject;
+                cw = GameObject.Instantiate(CrossWalkVertical, cwPosTop, Quaternion.identity) as GameObject;
                 cwCurScale = cw.transform.localScale;
                 cwCurScale.x = CrossWalkWidth;
                 cwCurScale.y = CrossWalkHeight;

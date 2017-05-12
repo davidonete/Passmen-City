@@ -34,11 +34,6 @@ ModelImporter:
     100056: SkyCarWheelFrontRight
     100058: SkyCarWheelRearLeft
     100060: SkyCarWheelRearRight
-    100062: SkyCarParts
-    100064: SkyCarParts_MeshPart0
-    100066: SkyCarParts_MeshPart1
-    100068: SkyCarBody
-    100070: SkyCarComponents
     400000: vehicle_skyCar_body_paintwork
     400002: vehicle_skyCar_body_parts
     400004: vehicle_skyCar_mudGuard_frontLeft
@@ -70,11 +65,6 @@ ModelImporter:
     400056: SkyCarWheelFrontRight
     400058: SkyCarWheelRearLeft
     400060: SkyCarWheelRearRight
-    400062: SkyCarParts
-    400064: SkyCarParts_MeshPart0
-    400066: SkyCarParts_MeshPart1
-    400068: SkyCarBody
-    400070: SkyCarComponents
     2300000: vehicle_skyCar_body_paintwork
     2300002: vehicle_skyCar_body_parts
     2300004: vehicle_skyCar_mudGuard_frontLeft
@@ -103,10 +93,6 @@ ModelImporter:
     2300050: SkyCarWheelFrontRight
     2300052: SkyCarWheelRearLeft
     2300054: SkyCarWheelRearRight
-    2300056: SkyCarParts_MeshPart0
-    2300058: SkyCarParts_MeshPart1
-    2300060: SkyCarBody
-    2300062: SkyCarComponents
     3300000: vehicle_skyCar_body_paintwork
     3300002: vehicle_skyCar_body_parts
     3300004: vehicle_skyCar_mudGuard_frontLeft
@@ -135,10 +121,6 @@ ModelImporter:
     3300050: SkyCarWheelFrontRight
     3300052: SkyCarWheelRearLeft
     3300054: SkyCarWheelRearRight
-    3300056: SkyCarParts_MeshPart0
-    3300058: SkyCarParts_MeshPart1
-    3300060: SkyCarBody
-    3300062: SkyCarComponents
     4300000: vehicle_skyCar_wheel_rearLeft
     4300002: vehicle_skyCar_wheel_rearRight
     4300004: vehicle_skyCar_underside
@@ -167,10 +149,6 @@ ModelImporter:
     4300050: SkyCarBodyParts
     4300052: SkyCarBrakeLightsGlow
     4300054: SkyCarHeadLightsGlow
-    4300056: SkyCarParts_MeshPart0
-    4300058: SkyCarParts_MeshPart1
-    4300060: SkyCarComponents
-    4300062: SkyCarBody
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -202,8 +180,8 @@ ModelImporter:
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
-    useFileUnits: 0
-    optimizeMeshForGPU: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
@@ -214,7 +192,7 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
+    tangentImportMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
