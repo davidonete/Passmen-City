@@ -3,26 +3,26 @@ using System.Collections;
 
 public class TrafficLightBehaviour : MonoBehaviour {
 
-  //public Material RedMaterial;
-  //public Material GreenMaterial;
-  //private Renderer Renderer;
+  public Material RedMaterial;
+  public Material GreenMaterial;
+  private Renderer Renderer;
 
   public CrossWalkBehaviour CrossWalkReference;
-  public Light TrafficLight;
+  //public Light TrafficLight;
 
   void Start ()
   {
-    //Renderer = GetComponent<Renderer>();
+    Renderer = GetComponent<Renderer>();
     //SelectMaterial();
   }
 
   void Update ()
   {
-    SelectLight();
-    //SelectMaterial();
+    //SelectLight();
+    SelectMaterial();
   }
 
-  void SelectLight()
+  /*void SelectLight()
   {
     if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
     {
@@ -36,24 +36,30 @@ public class TrafficLightBehaviour : MonoBehaviour {
         TrafficLight.color = Color.red;
       else
         TrafficLight.color = Color.green;
-  }
-
-  /*void SelectMaterial()
-  {
-    if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
-    {
-      if (gameObject.tag == "PedestrianTrafficLight")
-        Renderer.material = GreenMaterial;
-      else
-        Renderer.material = RedMaterial;
-    }
-    else
-    {
-      if (gameObject.tag == "PedestrianTrafficLight")
-        Renderer.material = RedMaterial;
-      else
-        Renderer.material = GreenMaterial;
-    }
   }*/
+
+  void SelectMaterial()
+  {
+    if (CrossWalkReference.gameObject.GetComponent<CrossWalkBehaviour>().GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
+    {
+      if (gameObject.tag == "PedestrianTrafficLight")
+       ChangeMaterial(GreenMaterial);
+      else
+       ChangeMaterial(RedMaterial);
+    }
+    else
+    {
+      if (gameObject.tag == "PedestrianTrafficLight")
+        ChangeMaterial(RedMaterial);
+      else
+        ChangeMaterial(GreenMaterial);
+    }
+  }
+
+  void ChangeMaterial(Material material)
+  {
+      Renderer.material = material;
+      Renderer.material.SetColor("_EmissionColor", material.color);
+  }
 
 }
