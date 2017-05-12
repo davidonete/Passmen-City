@@ -111,7 +111,7 @@ public class PedestrianBehavior : MonoBehaviour
             }
             crowd.RemovePedestrian(this);
 
-            mNNController.TrainNeuralNetwork(mNN.GetInputCache());
+            //mNNController.TrainNeuralNetwork(mNN.GetInputCache());
 
             Destroy(this.gameObject);
         }

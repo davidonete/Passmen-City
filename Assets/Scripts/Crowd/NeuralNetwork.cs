@@ -316,7 +316,7 @@ namespace NN
             else
                 inputs.Add(1.0);
 
-            mInputCache.Add(inputs);
+            //mInputCache.Add(inputs);
 
             FeedForward(inputs);
 
