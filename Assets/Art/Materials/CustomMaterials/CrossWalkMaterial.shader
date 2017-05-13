@@ -62,7 +62,7 @@ Shader "Instanced/CrossWalkMaterial" {
 			else
 			{
 				float colorMod = sin(IN.uv_MainTex.x * 50.0);
-				o.Albedo = lerp(black, white, pow(colorMod, 0.25));
+				o.Albedo = lerp(black, white, colorMod);
 			}
 		}
 		ENDCG

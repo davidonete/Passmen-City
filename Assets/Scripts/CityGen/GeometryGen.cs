@@ -47,17 +47,15 @@ public class GeometryGen
         mesh.SetVertices(toCopyVertices);
         
         // Copy normals
-        List<Vector3> toCopyNormals = new List<Vector3>();
-        foreach (Vector3 ele in mCubeMesh.normals)
-        {
-            toCopyNormals.Add(ele);
-        }
+        List<Vector3> toCopyNormals = new List<Vector3>(mCubeMesh.normals);
         mesh.SetNormals(toCopyNormals);
 
         // Copy triangles
         mesh.SetTriangles(mCubeMesh.triangles,0,true);
-        
+
         // TO-DO: Copy UVs
+        List<Vector2> toCopyUvs = new List<Vector2>(mCubeMesh.uv);
+        mesh.SetUVs(0, toCopyUvs);
 
         // Adjust vertex 
         for(int i=0;i<mesh.vertexCount;i++)
