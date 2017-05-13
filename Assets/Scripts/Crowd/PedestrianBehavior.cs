@@ -302,6 +302,9 @@ public class PedestrianBehavior : MonoBehaviour
             mNextLocation.y = 0.0f;
             mPath.RemoveAt(mPath.Count - 1);
 
+            // Opt version?
+            transform.forward = (mNextLocation - transform.position).normalized;
+
             return true;
         }
         return false;
@@ -309,12 +312,17 @@ public class PedestrianBehavior : MonoBehaviour
 
     void UpdatePathfindingMovement()
     {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        RigidBody.velocity = Vector3.zero;
 
         if (Vector3.Distance(transform.position, mNextLocation) > mMinDistance)
         {
-            transform.forward = (mNextLocation - transform.position).normalized;
-            transform.position = Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed);
+            // Initial version
+            //transform.forward = (mNextLocation - transform.position).normalized;
+
+            //transform.position = Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed);
+
+            // Test this
+            RigidBody.MovePosition(Vector3.MoveTowards(transform.position, mNextLocation, Time.fixedDeltaTime * MovementSpeed));
         }
         else
         {
