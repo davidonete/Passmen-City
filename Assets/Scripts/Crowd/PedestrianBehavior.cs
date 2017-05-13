@@ -131,7 +131,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (GetLeader())
         {
             transform.forward = Velocity.normalized;
-            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed * 1.25f));
+            RigidBody.MovePosition(transform.position + (Velocity * Time.fixedDeltaTime * MovementSpeed * 1.0f));
             
             //Check if the distance to the final location has increased
         }
