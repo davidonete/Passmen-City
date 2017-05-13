@@ -3,44 +3,49 @@ using System.Collections;
 
 public class TrafficLightBehaviour : MonoBehaviour
 {
-    private Renderer mRenderer;
-    private Material mMaterial;
-    private bool mIsOpen;
-    public CrossWalkBehaviour CrossWalkRef;
+  private Renderer Renderer;
+  private Material Material;
+  private bool IsRed;
+  public CrossWalkBehaviour CrossWalkReference;
 
-    void Start()
-    {
-        mRenderer = GetComponent<Renderer>();
-        mMaterial = mRenderer.material;
-        mIsOpen = true;
-    }
+  void Start()
+  {
+    Renderer = GetComponent<Renderer>();
+    Material = Renderer.material;
+    IsRed = true;
+  }
 
-    void Update()
+  void Update()
+  {
+    // Green light
+    if (CrossWalkReference.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
     {
-        // Green light
-        if(CrossWalkRef.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
-        {
-            if(!mIsOpen)
-            {
-                mMaterial.SetColor("_Color", Color.green);
-                mMaterial.SetColor("_EmissionColor", Color.green);
-                mIsOpen = true;
-            }
-        }
-        // Red light
-        else
-        {
-            if(mIsOpen)
-            {
-                mMaterial.SetColor("_Color", Color.red);
-                mMaterial.SetColor("_EmissionColor", Color.red);
-                mIsOpen = false;
-            }
-        }
+      if (!IsRed)
+      {
+        ChangeEmissiveColor(Color.green, Color.black);
+        IsRed = true;
+      }
     }
+    // Red light
+    else
+    {
+      if (IsRed)
+      {
+        ChangeEmissiveColor(Color.black, Color.red);
+        IsRed = false;
+      }
+    }
+  }
+
+  void ChangeEmissiveColor(Color GreenLight, Color RedLight)
+  {
+    if (gameObject.tag == "GreenTrafficLight")
+      Material.SetColor("_EmissionColor", GreenLight);
+
+    if (gameObject.tag == "RedTrafficLight")
+      Material.SetColor("_EmissionColor", RedLight);
+  }
 }
-
-
 
 
 /*void SelectLight()
