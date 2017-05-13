@@ -5,14 +5,21 @@ public class TrafficLightBehaviour : MonoBehaviour
 {
   private Renderer Renderer;
   private Material Material;
-  private bool IsRed;
+  private bool IsOpen;
+  private bool IsTrafficLigtForCars;
   public CrossWalkBehaviour CrossWalkReference;
 
   void Start()
   {
     Renderer = GetComponent<Renderer>();
     Material = Renderer.material;
-    IsRed = true;
+
+    if (transform.parent.name == "CarTrafficLight")
+      IsTrafficLigtForCars = true;
+    else
+      IsTrafficLigtForCars = false;
+
+    IsOpen = true;
   }
 
   void Update()
@@ -20,19 +27,27 @@ public class TrafficLightBehaviour : MonoBehaviour
     // Green light
     if (CrossWalkReference.GetCrossWalkStates == CrossWalkBehaviour.CrossWalkStates.kCrossWalkStates_GreenLight)
     {
-      if (!IsRed)
+      if (!IsOpen)
       {
-        ChangeEmissiveColor(Color.green, Color.black);
-        IsRed = true;
+        if (!IsTrafficLigtForCars)
+          ChangeEmissiveColor(Color.green, Color.black);
+        else
+          ChangeEmissiveColor(Color.black, Color.red);
+
+        IsOpen = true;
       }
     }
     // Red light
     else
     {
-      if (IsRed)
+      if (IsOpen)
       {
-        ChangeEmissiveColor(Color.black, Color.red);
-        IsRed = false;
+        if (!IsTrafficLigtForCars)
+          ChangeEmissiveColor(Color.black, Color.red);
+        else
+          ChangeEmissiveColor(Color.green, Color.black);
+
+        IsOpen = false;
       }
     }
   }
