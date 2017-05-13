@@ -22,7 +22,7 @@ public class PedestrianBehavior : MonoBehaviour
 
     List<Vector3> mPath = new List<Vector3>();
     Vector3 mNextLocation;
-    float mMinDistance = 0.04f;
+    float mMinDistance = 0.2f;
 
     PedestrianState mState;
     Rigidbody RigidBody;
@@ -131,7 +131,7 @@ public class PedestrianBehavior : MonoBehaviour
         if (GetLeader())
         {
             transform.forward = Velocity.normalized;
-            RigidBody.MovePosition(transform.position + (Velocity * Time.fixedDeltaTime * MovementSpeed * 1.0f));
+            RigidBody.MovePosition(transform.position + (Velocity * Time.deltaTime * MovementSpeed * 1.0f));
             
             //Check if the distance to the final location has increased
         }
@@ -303,7 +303,13 @@ public class PedestrianBehavior : MonoBehaviour
             mPath.RemoveAt(mPath.Count - 1);
 
             // Opt version?
-            transform.forward = (mNextLocation - transform.position).normalized;
+            /*
+            Vector3 forward = (mNextLocation - transform.position).normalized;
+            if (forward == Vector3.zero)
+                transform.forward = new Vector3(1.0f, 0.0f, 0.0f);
+            else
+                transform.forward = forward;
+            */
 
             return true;
         }
@@ -317,12 +323,16 @@ public class PedestrianBehavior : MonoBehaviour
         if (Vector3.Distance(transform.position, mNextLocation) > mMinDistance)
         {
             // Initial version
-            //transform.forward = (mNextLocation - transform.position).normalized;
+            Vector3 forward = (mNextLocation - transform.position).normalized;
+            if (forward == Vector3.zero)
+                transform.forward = new Vector3(1.0f, 0.0f, 0.0f);
+            else
+                transform.forward = forward;
 
             //transform.position = Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed);
 
             // Test this
-            RigidBody.MovePosition(Vector3.MoveTowards(transform.position, mNextLocation, Time.fixedDeltaTime * MovementSpeed));
+            RigidBody.MovePosition(Vector3.MoveTowards(transform.position, mNextLocation, Time.deltaTime * MovementSpeed));
         }
         else
         {
