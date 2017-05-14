@@ -85,7 +85,7 @@ public class CrossWalkBehaviour : MonoBehaviour {
   {
     if (Condition.TimeBetweenChanges <= 0.0f)
     {
-      if (Condition.NumberOfPedestrians.Count == 0)
+      if (Condition.NumberOfPedestrians.Count <= 0)
       {
         Condition.TimeBetweenChanges = TimeBetweenChanges;
         Condition.IsPedestrianWaiting = false;
