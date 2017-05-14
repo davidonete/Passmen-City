@@ -14,7 +14,7 @@ public class CarDetection : MonoBehaviour {
   // Update is called once per frame
   void FixedUpdate()
   {
-    RayCast();
+    //RayCast();
   }
 
   void RayCast()
