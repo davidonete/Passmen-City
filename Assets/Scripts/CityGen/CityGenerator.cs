@@ -36,6 +36,7 @@ public class CityGenerator : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false; 
         if(!mInitialized && InitOnStart)
         {
             //InitializeCity();
