@@ -11,75 +11,28 @@ public class CarDetection : MonoBehaviour {
 	
 	}
 
-
   // Update is called once per frame
   void FixedUpdate()
   {
     RayCast();
   }
 
-  /*void OnTriggerEnter(Collider other)
-  {
-    if (other.tag == "Car" && (!other.GetComponent<CarBehaviour>().GetCarStates.IsNearObjective && !GetComponent<CarBehaviour>().GetCarStates.IsNearObjective))
-    {
-      Vector3 selfTargetDirection = transform.forward;
-      Vector3 hitTargetDirection = other.transform.forward;
-
-      if (hitTargetDirection == selfTargetDirection)
-      {
-        //Debug.Log("Hola");
-        if (GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective >= other.GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective)
-          GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-        else
-         other.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-      }
-    }
-  }
-
-  void OnTriggerExit(Collider other)
-  {
-    if (other.tag == "Car")
-    {
-      if (GetComponent<CarBehaviour>().GetCarStates.IsOtherCarNear)
-        GetComponent<CarBehaviour>().SetIsOtherCarNear(false);
-      else
-        other.GetComponent<CarBehaviour>().SetIsOtherCarNear(false);
-    }
-  }*/
-
   void RayCast()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position,transform.forward, out hit, 3.0f, LayerMask) && hit.collider != this)
+    Vector3 point = transform.position + transform.forward * 4.0f + new Vector3(0.0f, 0.5f, 0.0f);
+    if (Physics.Raycast(transform.position + new Vector3(0.0f, 0.5f, 0.0f), transform.forward, out hit, 4.0f, LayerMask) && hit.collider != this)
     {
       if (hit.collider.gameObject.tag == "Car")
       {
-
         Vector3 selfTargetDirection = gameObject.transform.forward.normalized;
         Vector3 hitTargetDirection = hit.collider.gameObject.transform.forward.normalized;
 
-        if (hitTargetDirection == selfTargetDirection)
-        {
-          //Debug.DrawLine(hit.transform.position, transform.position, Color.blue, 2.0f);
+        float angle = Vector3.Angle(hitTargetDirection, selfTargetDirection);
+
+        if (angle <= 10.0f)
           gameObject.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-        }
       }
-
-      /*if (hit.collider.gameObject.tag == "Car" && (!hit.collider.GetComponent<CarBehaviour>().GetCarStates.IsNearObjective || !GetComponent<CarBehaviour>().GetCarStates.IsNearObjective))
-      {
-        Vector3 selfTargetDirection = transform.forward;
-        Vector3 hitTargetDirection = hit.transform.forward;
-
-        if (hitTargetDirection == selfTargetDirection)
-        {
-          //Debug.DrawLine(transform.position, hit.transform.position, Color.green, 2.0f);
-
-          if (hit.collider.GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective >= GetComponent<CarBehaviour>().GetCarStates.DistanceFromObjective)
-            hit.collider.GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-          else
-            GetComponent<CarBehaviour>().SetIsOtherCarNear(true);
-        }
-      }*/
     }
     else
     {
